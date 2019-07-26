@@ -1,0 +1,28 @@
+{
+  "name": "migasfree-play",
+  "version": "1.0.0",
+  "description": "Migasfree Client front-end. Allow install/uninstall available applications and printers.",
+  "author": "Jose Antonio Chavarría",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/markdownit": "^1.2.6",
+    "express": "^4.17.1",
+    "nuxt": "^2.0.0",
+    "nuxt-element-ui": "^1.0.10",
+    "python-shell": "^1.0.7",
+    "vue-star-rating": "^1.6.1"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "nodemon": "^1.18.9",
+    "prettier": "^1.16.4"
+  }
+}
