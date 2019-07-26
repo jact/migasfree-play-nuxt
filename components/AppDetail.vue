@@ -11,33 +11,49 @@
         :max-rating="5"
         :star-size="15"
       ></star-rating>
-      <div v-html="$md.render(description)"></div>
-    </div>
-    <div class="extra content">
-      <button class="ui icon positive button" data-tooltip="Instalar" data-position="bottom center">
-        <i class="download icon"></i>
-      </button>
-      <button
-        class="ui icon negative button"
-        data-tooltip="Desinstalar"
-        data-position="bottom center"
-      >
-        <i class="trash alternate icon"></i>
-      </button>
-      <button
-        class="ui icon orange button"
-        data-tooltip="Instalar con privilegios"
-        data-position="bottom center"
-      >
-        <i class="hat wizard icon"></i>
-      </button>
-      <button class="ui icon brown button" data-tooltip="Bloqueado" data-position="bottom center">
-        <i class="lock icon"></i>
-      </button>
-      <span class="ui blue basic tag label">Instalado</span>
+      <details>
+        <summary>{{ truncatedDescription }}</summary>
+        <div class="more-info" v-html="$md.render(moreInfo)"></div>
+      </details>
+      <div class="extra content">
+        <button
+          class="ui icon positive button"
+          data-tooltip="Instalar"
+          data-position="bottom center"
+        >
+          <i class="download icon"></i>
+        </button>
+        <button
+          class="ui icon negative button"
+          data-tooltip="Desinstalar"
+          data-position="bottom center"
+        >
+          <i class="trash alternate icon"></i>
+        </button>
+        <button
+          class="ui icon orange button"
+          data-tooltip="Instalar con privilegios"
+          data-position="bottom center"
+        >
+          <i class="hat wizard icon"></i>
+        </button>
+        <button class="ui icon brown button" data-tooltip="Bloqueado" data-position="bottom center">
+          <i class="lock icon"></i>
+        </button>
+        <span class="ui blue basic tag label">Instalado</span>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+details {
+  margin: 10px 0;
+}
+.more-info {
+  margin: 5px;
+}
+</style>
 
 <script>
 import StarRating from 'vue-star-rating'
@@ -54,6 +70,16 @@ export default {
   },
   components: {
     StarRating
+  },
+  computed: {
+    truncatedDescription() {
+      return this.description.split('\n')[0]
+    },
+    moreInfo() {
+      let items = this.description.split('\n')
+      items.shift()
+      return items.join('\n')
+    }
   }
 }
 </script>
