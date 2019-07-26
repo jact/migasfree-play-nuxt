@@ -6,7 +6,7 @@
       </div>
       <template v-else>
         <keep-alive>
-          <form class="ui form" @submit.prevent>
+          <el-form ref="form" :model="form" @submit.prevent>
             <div class="field">
               <el-select
                 v-model="category"
@@ -26,9 +26,13 @@
               </el-select>
             </div>
             <div class="field">
-              <el-input placeholder="   buscar" v-model="searchApp" @input="setSearchApp">
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
-              </el-input>
+              <el-input
+                placeholder="buscar"
+                v-model="searchApp"
+                @input="setSearchApp"
+                clearable
+                prefix-icon="el-icon-search"
+              ></el-input>
             </div>
             <div class="inline field">
               <el-switch
@@ -38,12 +42,18 @@
                 @change="setOnlyInstalledApps"
               />
             </div>
-          </form>
+          </el-form>
         </keep-alive>
       </template>
     </div>
   </div>
 </template>
+
+<style scoped>
+.field {
+  margin: 10px 0;
+}
+</style>
 
 <script>
 export default {
