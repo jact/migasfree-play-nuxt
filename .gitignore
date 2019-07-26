@@ -86,3 +86,8 @@ sw.*
 
 # Mac OSX
 .DS_Store
+/semantic/
+/semantic.json
+/settings.json
+/token
+/yarn.lock
