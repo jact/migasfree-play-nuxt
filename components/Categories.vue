@@ -6,7 +6,7 @@
       </div>
       <template v-else>
         <keep-alive>
-          <el-form ref="form" :model="form" @submit.prevent>
+          <el-form ref="form" @submit.prevent>
             <div class="field">
               <el-select
                 v-model="category"
