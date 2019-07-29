@@ -1,50 +1,45 @@
 <template>
   <div class="ui two column centered grid">
     <div class="column">
-      <div v-if="isLoading" class="ui active inverted dimmer">
-        <div class="ui medium loader"></div>
-      </div>
-      <template v-else>
-        <keep-alive>
-          <el-form ref="form" @submit.prevent>
-            <div class="field">
-              <el-select
-                v-model="category"
-                placeholder="Categoría"
-                @change="setCategory"
-                size="large"
-                data-tooltip="Categoría"
-                data-position="bottom center"
-              >
-                <el-option
-                  v-for="(item, index) in categories"
-                  :key="index"
-                  :value="index"
-                  :selected="index == selectedCategory"
-                  :label="item"
-                ></el-option>
-              </el-select>
-            </div>
-            <div class="field">
-              <el-input
-                placeholder="buscar"
-                v-model="searchApp"
-                @input="setSearchApp"
-                clearable
-                prefix-icon="el-icon-search"
-              ></el-input>
-            </div>
-            <div class="inline field">
-              <el-switch
-                v-model="onlyInstalledApps"
-                active-text="Aplicaciones instaladas"
-                inactive-text="Todas las aplicaciones"
-                @change="setOnlyInstalledApps"
-              />
-            </div>
-          </el-form>
-        </keep-alive>
-      </template>
+      <keep-alive>
+        <el-form ref="form" @submit.prevent>
+          <div class="field">
+            <el-select
+              v-model="category"
+              placeholder="Categoría"
+              @change="setCategory"
+              size="large"
+              data-tooltip="Categoría"
+              data-position="bottom center"
+            >
+              <el-option
+                v-for="(item, index) in categories"
+                :key="index"
+                :value="index"
+                :selected="index == selectedCategory"
+                :label="item"
+              ></el-option>
+            </el-select>
+          </div>
+          <div class="field">
+            <el-input
+              placeholder="buscar"
+              v-model="searchApp"
+              @input="setSearchApp"
+              clearable
+              prefix-icon="el-icon-search"
+            ></el-input>
+          </div>
+          <div class="inline field">
+            <el-switch
+              v-model="onlyInstalledApps"
+              active-text="Aplicaciones instaladas"
+              inactive-text="Todas las aplicaciones"
+              @change="setOnlyInstalledApps"
+            />
+          </div>
+        </el-form>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -60,7 +55,6 @@ export default {
   name: 'Categories',
   data() {
     return {
-      isLoading: false,
       category: this.$store.state.selectedCategory || 'All',
       searchApp: '',
       onlyInstalledApps: false
