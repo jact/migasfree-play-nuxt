@@ -30,7 +30,10 @@ const createStore = () => {
         link: ''
       },
       serverVersion: '',
-      availablePackages: [],
+      packages: {
+        available: [],
+        installed: []
+      },
       selectedCategory: null,
       searchApp: null,
       onlyInstalledApps: false,
@@ -74,6 +77,8 @@ const createStore = () => {
         )
         vuexContext.commit('setApps', apps.results)
 
+        await vuexContext.dispatch('setInstalledPackages')
+
         const categories = await context.app.$axios.$get(
           `${tokenApi}${vuexContext.state.tokenApi.categories}`,
           headers
@@ -101,11 +106,27 @@ const createStore = () => {
         }
 
         return `Bearer ${response.token}`
+      },
+      async setInstalledPackages(vuexContext) {
+        let response = await this.$axios.$post(
+          `${vuexContext.state.internalApi}/packages/installed`,
+          vuexContext.getters.getAppsPackages
+        )
+        vuexContext.commit('setInstalledPackages', response)
       }
     },
     getters: {
       getCategories(state) {
         return state.categories
+      },
+      getAppsPackages(state) {
+        let packages = []
+        state.apps.forEach(function(value, index, array) {
+          if (value.packages_to_install.length > 0) {
+            packages = packages.concat(value.packages_to_install)
+          }
+        })
+        return packages
       }
     },
     mutations: {
@@ -113,7 +134,7 @@ const createStore = () => {
         state.computer.uuid = value.uuid
         state.computer.name = value.computer_name
         state.computer.user = value.user
-        state.computer.project = value.project
+        state.computer.project = 'AZL-16' // value.project // FIXME
         state.computer.link = `${state.protocol}`
         // state.host = value.server // TODO
         state.computer.link = `${state.protocol}://${state.host}/admin/server/computer/`
@@ -128,14 +149,26 @@ const createStore = () => {
         state.serverVersion = value
       },
       setApps(state, value) {
-        state.apps = value
+        state.apps = []
+        value.forEach(function(item, index, array) {
+          let filterPackages = item.packages_by_project.filter(
+            packages => state.computer.project === packages.project.name
+          )
+          if (filterPackages.length > 0) {
+            item.packages_to_install = filterPackages[0].packages_to_install
+            state.apps.push(item)
+          }
+        })
       },
       setCategories(state, value) {
         state.categories = value
         state.categories[0] = 'All'
       },
       setAvailablePackages(state, value) {
-        state.availablePackages = value
+        state.packages.available = value
+      },
+      setInstalledPackages(state, value) {
+        state.packages.installed = value
       },
       setSelectedCategory(state, value) {
         state.selectedCategory = value
