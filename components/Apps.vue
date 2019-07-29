@@ -2,20 +2,17 @@
   <div>
     <Categories />
     <div class="ui two stackable cards">
-      <div v-if="isLoading" class="ui active inverted dimmer">
-        <div class="ui big loader"></div>
-      </div>
-      <template v-else>
-        <AppDetail
-          v-for="item in appsByFilter"
-          :key="item.id"
-          :icon="item.icon"
-          :name="item.name"
-          :category="item.category.name"
-          :score="item.score"
-          :description="item.description"
-        />
-      </template>
+      <AppDetail
+        v-for="item in appsByFilter"
+        :key="item.id"
+        :icon="item.icon"
+        :name="item.name"
+        :category="item.category.name"
+        :score="item.score"
+        :description="item.description"
+        :packages="item.packages_to_install"
+        :level="item.level.id"
+      />
     </div>
   </div>
 </template>
@@ -32,7 +29,6 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
       apps: []
     }
   },
@@ -50,7 +46,14 @@ export default {
             app.name.toLowerCase().includes(this.$store.state.searchApp) ||
             app.description.toLowerCase().includes(this.$store.state.searchApp)
         )
-      // if only installed apps...
+      if (this.$store.state.onlyInstalledApps)
+        results = results.filter(
+          app =>
+            app.packages_to_install.length > 0 &&
+            app.packages_to_install.filter(
+              x => !this.$store.state.packages.installed.includes(x)
+            ).length === 0
+        )
 
       return results
     }
