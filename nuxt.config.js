@@ -38,7 +38,8 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/markdownit',
-    'nuxt-element-ui'
+    'nuxt-element-ui',
+    '@nuxtjs/toast'
   ],
   serverMiddleware: ['~/api/index.js'],
   /*
@@ -48,6 +49,10 @@ export default {
   axios: { credentials: false, proxyHeaders: false },
   markdownit: {
     injected: true
+  },
+  toast: {
+    position: 'bottom-left',
+    duration: 3000
   },
   /*
    ** Build configuration
