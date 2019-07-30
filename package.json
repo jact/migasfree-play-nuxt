@@ -13,6 +13,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/markdownit": "^1.2.6",
+    "@nuxtjs/toast": "^3.2.1",
     "express": "^4.17.1",
     "nuxt": "^2.0.0",
     "nuxt-element-ui": "^1.0.10",
