@@ -22,6 +22,7 @@
           class="ui icon positive button"
           data-tooltip="Instalar"
           data-position="bottom center"
+          @click="installApp(name, packages)"
         >
           <i class="download icon"></i>
         </button>
@@ -30,6 +31,7 @@
           class="ui icon negative button"
           data-tooltip="Desinstalar"
           data-position="bottom center"
+          @click="removeApp(name, packages)"
         >
           <i class="trash alternate icon"></i>
         </button>
@@ -103,6 +105,15 @@ export default {
       return this.packages.filter(
         x => !this.$store.state.packages.available.includes(x)
       )
+    }
+  },
+  methods: {
+    installApp(name, packages) {
+      console.log(name, packages)
+      this.$toast.info('probando...')
+    },
+    removeApp(name, packages) {
+      console.log(name, packages)
     }
   }
 }
