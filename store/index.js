@@ -20,10 +20,10 @@ const createStore = () => {
         apps: '/catalog/apps/available/?cid=',
         categories: '/catalog/apps/categories/'
       },
-      internalApi: 'http://localhost:3000/api',
+      internalApi: 'http://localhost:3000',
       computer: {
         name: '',
-        uuid: '',
+        uuid: 'B18268A8-8CD2-11E6-9C43-BC00002E0000', //'',
         cid: 4928, // FIXME 0 by default
         project: '',
         user: '',
