@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   mode: 'universal',
   /*
    ** Headers of the page
@@ -20,6 +20,7 @@ export default {
    ** Customize the progress-bar color
    */
   loading: false,
+  dev: process.env.NODE_ENV === 'DEV',
   /*
    ** Global CSS
    */
@@ -41,7 +42,6 @@ export default {
     'nuxt-element-ui',
     '@nuxtjs/toast'
   ],
-  serverMiddleware: ['~/api/index.js'],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -58,9 +58,20 @@ export default {
    ** Build configuration
    */
   build: {
-    /*
-     ** You can extend webpack config here
-     */
-    extend(config, ctx) {}
+    extend(config, { isDev, isClient }) {
+      if (isDev && isClient) {
+        // Run ESLint on save
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        })
+      }
+      // Extend only webpack config for client-bundle
+      if (isClient) {
+        config.target = 'electron-renderer'
+      }
+    }
   }
 }
