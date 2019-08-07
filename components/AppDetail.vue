@@ -69,6 +69,8 @@ details,
 
 <script>
 import StarRating from 'vue-star-rating'
+const os = require('os')
+const spawn = require('child_process').spawn
 
 export default {
   name: 'AppDetail',
@@ -109,11 +111,47 @@ export default {
   },
   methods: {
     installApp(name, packages) {
+      const packagesToInstall = packages.join(' ')
+      let cmd
+
       console.log(name, packages)
       this.$toast.info('probando...')
+
+      if (os.type() === 'Linux') {
+        cmd = 'LANG_ALL=C echo "y" | migasfree install ' + packagesToInstall
+      } else if (os.type() === 'Window_NT') {
+        cmd = 'migasfree install ' + packagesToInstall
+      }
+      console.log(cmd)
+
+      if (os.type() === 'Linux') {
+        process = spawn('bash', ['-c', cmd])
+      } else if (os.type() === 'Window_NT') {
+        process = spawn('cmd', ['/C', cmd])
+      }
+
+      process.stdout.on('data', data => {
+        console.log(data.toString())
+      })
+
+      process.stderr.on('data', data => {
+        console.log(data.toString())
+      })
+
+      process.on('exit', code => {
+        console.log(code)
+      })
     },
     removeApp(name, packages) {
+      const packagesToRemove = packages.join(' ')
+      let cmd
+
       console.log(name, packages)
+      if (os.type() === 'Linux') {
+        cmd = 'LANG_ALL=C echo "y" | migasfree purge ' + packagesToRemove
+      } else if (os.type() === 'Window_NT') {
+        cmd = 'migasfree purge ' + packagesToRemove
+      }
     }
   }
 }
