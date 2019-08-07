@@ -1,5 +1,4 @@
 let { PythonShell } = require('python-shell')
-
 const express = require('express')
 const router = express.Router()
 
@@ -42,30 +41,6 @@ print(json.dumps(installed))`
     res.setHeader('Content-Type', 'application/json')
     res.send(results[0])
   })
-})
-
-router.post('/install', (req, res) => {
-  const packages = JSON.stringify(req.body)
-  let cmd
-
-  if (getOS() === 'Linux') {
-    cmd = 'LANG_ALL=C echo "y" | migasfree -ip "' + packages + '"'
-  } else if (getOS() === 'Windows') {
-    cmd = 'migasfree -ip "' + packages + '"'
-  }
-  console.log(cmd)
-})
-
-router.post('/remove', (req, res) => {
-  const packages = JSON.stringify(req.body)
-  let cmd
-
-  if (getOS() === 'Linux') {
-    cmd = 'LANG_ALL=C echo "y" | migasfree -rp "' + packages + '"'
-  } else if (getOS() === 'Windows') {
-    cmd = 'migasfree -rp "' + packages + '"'
-  }
-  console.log(cmd)
 })
 
 module.exports = router
