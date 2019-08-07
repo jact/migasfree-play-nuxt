@@ -25,7 +25,8 @@ app.use((err, req, res, next) => {
   res.render('error')
 })
 
-module.exports = {
-  path: '/api',
-  handler: app
-}
+let server = app.listen(3000, () => {
+  console.log('Express server listening on port ' + '3000')
+})
+
+module.exports = app
