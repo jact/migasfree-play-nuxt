@@ -41,7 +41,7 @@ const newWin = () => {
       webSecurity: false
     }
   })
-  // win.maximize()
+  electron.Menu.setApplicationMenu(null)
   win.on('closed', () => (win = null))
   if (config.dev) {
     // Install vue dev tool and open chrome dev tools
