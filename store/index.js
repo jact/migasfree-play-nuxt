@@ -71,11 +71,15 @@ const createStore = () => {
           Authorization: vuexContext.dispatch('getToken')
         }
 
-        const apps = await context.app.$axios.$get(
-          `${tokenApi}${vuexContext.state.tokenApi.apps}${vuexContext.state.computer.cid}`,
-          headers
-        )
-        vuexContext.commit('setApps', apps.results)
+        await new Promise((resolve, reject) => {
+          vuexContext.dispatch('getAllResults', {
+            url: `${tokenApi}${vuexContext.state.tokenApi.apps}${vuexContext.state.computer.cid}`,
+            headers,
+            results: [],
+            resolve,
+            reject
+          })
+        })
 
         await vuexContext.dispatch('setInstalledPackages')
 
@@ -113,6 +117,32 @@ const createStore = () => {
           vuexContext.getters.getAppsPackages
         )
         vuexContext.commit('setInstalledPackages', response)
+      },
+      async getAllResults(
+        vuexContext,
+        { url, results, headers, resolve, reject }
+      ) {
+        await this.$axios
+          .$get(url, headers)
+          .then(response => {
+            const retrivedResults = results.concat(response.results)
+            if (response.next !== null) {
+              vuexContext.dispatch('getAllResults', {
+                url: response.next,
+                results: retrivedResults,
+                headers,
+                resolve,
+                reject
+              })
+            } else {
+              vuexContext.commit('setApps', retrivedResults)
+              resolve(retrivedResults)
+            }
+          })
+          .catch(error => {
+            console.log(error)
+            reject('Something wrong. Please refresh the page and try again.')
+          })
       }
     },
     getters: {
