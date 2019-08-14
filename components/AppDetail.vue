@@ -1,7 +1,7 @@
 <template>
   <div class="fluid card">
     <div class="content">
-      <img class="right floated tiny ui image" :src="icon" />
+      <img class="right floated tiny ui image" :src="icon" @error="defaultIcon" />
       <div class="header">{{ name }}</div>
       <div class="meta">{{ category }}</div>
       <star-rating
@@ -152,6 +152,9 @@ export default {
       } else if (os.type() === 'Window_NT') {
         cmd = 'migasfree purge ' + packagesToRemove
       }
+    },
+    defaultIcon(event) {
+      event.target.src = '/img/migasfree-play.svg'
     }
   }
 }
