@@ -4,19 +4,15 @@
       <form class="ui form">
         <div class="field">
           <select>
-            <option
-              v-for="item in languages"
-              :key="item.code"
-              :value="item.code"
-              >{{ item.name }}</option
-            >
+            <option v-for="item in languages" :key="item.code" :value="item.code">{{ item.name }}</option>
           </select>
         </div>
         <div class="inline field">
-          <div class="ui toggle checkbox">
-            <input type="checkbox" tabindex="0" class="hidden" />
-            <label>Mostrar detalles al sincronizar</label>
-          </div>
+          <el-switch
+            v-model="showDetails"
+            active-text="Mostrar detalles al sincronizar"
+            @change="setShowDetails"
+          />
         </div>
       </form>
     </div>
@@ -31,13 +27,14 @@ export default {
       languages: [
         { code: 'es', name: 'Español' },
         { code: 'en', name: 'English' }
-      ]
+      ],
+      showDetails: false
     }
   },
-  created() {},
-  methods: {},
-  mounted() {
-    // document.querySelectorAll('.checkbox').checkbox()
+  methods: {
+    setShowDetails(value) {
+      this.showDetails = value
+    }
   }
 }
 </script>
