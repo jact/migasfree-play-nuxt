@@ -91,3 +91,4 @@ sw.*
 /settings.json
 /token
 /yarn.lock
+/executions.json
