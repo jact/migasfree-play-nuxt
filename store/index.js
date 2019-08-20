@@ -1,4 +1,27 @@
 import Vuex from 'vuex'
+const dateFormat = require('dateformat')
+
+function escapeRegExp(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+}
+
+function replaceAll(str, find, replace) {
+  var exp = escapeRegExp(find)
+  var re = new RegExp(exp, 'g')
+
+  return str.replace(re, replace)
+}
+
+function replaceColors(txt) {
+  txt = replaceAll(txt, '\u001b[92m', "<span class='console-section'>")
+  txt = replaceAll(txt, '\u001b[93m', "<span class='ui yellow text'>") // warning
+  txt = replaceAll(txt, '\u001b[91m', "<span class='ui red text'>") // error
+  txt = replaceAll(txt, '\u001b[32m', "<span class='ui blue text'>") // info
+  txt = replaceAll(txt, '\u001b[0m', '</span>')
+  txt = txt.replace(/(?:\r\n|\r|\n)/g, '<br />')
+
+  return txt
+}
 
 const createStore = () => {
   return new Vuex.Store({
@@ -38,7 +61,13 @@ const createStore = () => {
       searchApp: null,
       onlyInstalledApps: false,
       apps: [],
-      categories: []
+      categories: [],
+      executions: {
+        log: {},
+        lastId: '',
+        isRunningCommand: false,
+        error: ''
+      }
     }),
     actions: {
       async nuxtServerInit(vuexContext, context) {
@@ -88,6 +117,8 @@ const createStore = () => {
           headers
         )
         vuexContext.commit('setCategories', categories)
+
+        await vuexContext.dispatch('getExecutions')
       },
       async getToken(vuexContext) {
         let response = await this.$axios.$get(
@@ -143,6 +174,84 @@ const createStore = () => {
             console.log(error)
             reject('Something wrong. Please refresh the page and try again.')
           })
+      },
+      async getExecutions(vuexContext) {
+        let response = await this.$axios.$get(
+          `${vuexContext.state.internalApi}/executions`
+        )
+        vuexContext.commit('setExecutionsLog', response)
+      },
+      async setExecutions(vuexContext) {
+        await this.$axios.$post(
+          `${vuexContext.state.internalApi}/executions`,
+          vuexContext.state.executions.log
+        )
+      },
+      run(vuexContext, { cmd, text, id = null }) {
+        if (vuexContext.state.executions.isRunningCommand) {
+          this.$toast.info('please wait, other process is running!!!')
+          return
+        }
+        this.commit('startedCmd')
+
+        // $('#' + id).addClass('blink') // FIXME floating action button
+
+        const os = require('os')
+        const spawn = require('child_process').spawn
+        let process
+
+        if (os.type() === 'Linux') {
+          process = spawn('bash', ['-c', cmd])
+        } else if (os.type() === 'Window_NT') {
+          process = spawn('cmd', ['/C', cmd])
+        }
+
+        this.commit('addExecution', text)
+
+        /*$('#console').append(renderRun(global.run_idx))
+      $(
+        '#console > li:nth-child(' + global.idx + ') > div.collapsible-header'
+      ).click()*/
+
+        process.stdout.on('data', data => {
+          this.commit('appendExecutionText', replaceColors(data.toString()))
+        })
+
+        process.stderr.on('data', data => {
+          this.commit('appendExecutionError', data.toString())
+          this.commit(
+            'appendExecutionText',
+            "<span class='ui negative text'>" + data.toString() + '</span>'
+          )
+        })
+
+        // when the spawn child process exits, check if there were any errors
+        process.on('exit', code => {
+          if (code !== 0) {
+            // Syntax error
+            this.$toast.error(`Error: ${code} ${cmd}`)
+            // win.show() // FIXME
+          } else {
+            if (vuexContext.state.executions.error === '') {
+              vuexContext.dispatch('setInstalledPackages')
+
+              /*if (id == 'sync' && document.hidden) { // FAB
+              // sync ok & minimized -> exit
+              exit()
+            }*/ // FIXME
+            } else {
+              this.$toast.error(
+                replaceColors(vuexContext.state.executions.error)
+              )
+              vuexContext.state.executions.error = ''
+            }
+          }
+
+          // $('#' + id).removeClass('blink')  // FIXME FAB
+
+          this.dispatch('setExecutions')
+          this.commit('finishedCmd')
+        })
       }
     },
     getters: {
@@ -208,6 +317,30 @@ const createStore = () => {
       },
       setOnlyInstalledApps(state, value) {
         state.onlyInstalledApps = value
+      },
+      setExecutionsLog(state, value) {
+        state.executions.log = value
+        if (value.length) state.executions.lastId = value[value.length - 1].id
+      },
+      startedCmd(state) {
+        state.executions.isRunningCommand = true
+      },
+      finishedCmd(state) {
+        state.executions.isRunningCommand = false
+      },
+      addExecution(state, command) {
+        let now = new Date()
+        state.executions.lastId = dateFormat(now, 'isoDateTime')
+        state.executions.log[state.executions.lastId] = {
+          command,
+          text: ''
+        }
+      },
+      appendExecutionText(state, text) {
+        state.executions.log[state.executions.lastId]['text'] += text
+      },
+      appendExecutionError(state, text) {
+        state.executions.error += text
       }
     }
   })
