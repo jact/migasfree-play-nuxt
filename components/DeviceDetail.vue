@@ -15,7 +15,7 @@
       <p>
         <span class="feature">BN</span>
         <button
-          class="ui icon positive button"
+          class="ui icon positive button right floated"
           data-tooltip="Instalar"
           data-position="bottom center"
         >
@@ -25,7 +25,7 @@
       <p>
         <span class="feature">Color</span>
         <button
-          class="ui icon negative button"
+          class="ui icon negative button right floated"
           data-tooltip="Desinstalar"
           data-position="bottom center"
         >
@@ -45,10 +45,6 @@
 .feature {
   font-size: 120%;
   color: #000;
-}
-
-.extra p button {
-  float: right;
 }
 </style>
 
