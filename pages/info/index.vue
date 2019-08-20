@@ -1,15 +1,13 @@
 <template>
-  <div class="no-print">
-    <center>
-      <p>
-        <img src="/img/migasfree-play.svg" id="logo" />
-      </p>
-    </center>
-  </div>
+  <Info />
 </template>
 
-<style scoped>
-#logo {
-  width: 20%;
+<script>
+import Info from '@/components/Info.vue'
+
+export default {
+  components: {
+    Info
+  }
 }
-</style>
+</script>
