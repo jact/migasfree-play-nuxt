@@ -22,7 +22,7 @@
           class="ui icon positive button"
           data-tooltip="Instalar"
           data-position="bottom center"
-          @click="installApp(name, packages)"
+          @click="installApp($event, name, packages)"
         >
           <i class="download icon"></i>
         </button>
@@ -31,7 +31,7 @@
           class="ui icon negative button"
           data-tooltip="Desinstalar"
           data-position="bottom center"
-          @click="removeApp(name, packages)"
+          @click="removeApp($event, name, packages)"
         >
           <i class="trash alternate icon"></i>
         </button>
@@ -110,10 +110,11 @@ export default {
     }
   },
   methods: {
-    installApp(name, packages) {
+    installApp(event, name, packages) {
       const packagesToInstall = packages.join(' ')
       let cmd
 
+      event.srcElement.parentElement.disabled = true
       this.$toast.info(`Installing ${name}...`)
 
       if (os.type() === 'Linux') {
@@ -124,13 +125,15 @@ export default {
 
       this.$store.dispatch('run', {
         cmd,
-        text: `Install ${name}`
+        text: `Install ${name}`,
+        element: event.srcElement.parentElement
       })
     },
-    removeApp(name, packages) {
+    removeApp(event, name, packages) {
       const packagesToRemove = packages.join(' ')
       let cmd
 
+      event.srcElement.parentElement.disabled = true
       this.$toast.info(`Removing ${name}...`)
 
       if (os.type() === 'Linux') {
@@ -141,7 +144,8 @@ export default {
 
       this.$store.dispatch('run', {
         cmd,
-        text: `Remove ${name}`
+        text: `Remove ${name}`,
+        element: event.srcElement.parentElement
       })
     },
     defaultIcon(event) {
