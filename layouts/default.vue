@@ -31,7 +31,7 @@
   position: fixed;
   bottom: 30px;
   right: 30px;
-  font-size: 200%;
+  font-size: 150%;
 }
 </style>
 
