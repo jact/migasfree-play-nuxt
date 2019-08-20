@@ -1,7 +1,7 @@
 <template>
   <div class="ui stackable cards">
     <DeviceDetail
-      icon="tcp.png"
+      icon="/img/printer-net.png"
       name="EPSON EPL-N2550"
       id="15759"
       connection="TCP"
