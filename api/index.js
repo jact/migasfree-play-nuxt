@@ -1,18 +1,23 @@
 const express = require('express')
 const app = express()
 
+const bodyParser = require('body-parser')
+
 const packagesRouter = require('./routes/packages')
 const preferencesRouter = require('./routes/preferences')
 const computerRouter = require('./routes/computer')
 const tokenRouter = require('./routes/token')
+const executionsRouter = require('./routes/executions')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 app.use('/packages', packagesRouter)
 app.use('/preferences', preferencesRouter)
 app.use('/computer', computerRouter)
 app.use('/token', tokenRouter)
+app.use('/executions', executionsRouter)
 
 // error handler
 app.use((err, req, res, next) => {
@@ -26,7 +31,7 @@ app.use((err, req, res, next) => {
 })
 
 let server = app.listen(3000, () => {
-  console.log('Express server listening on port ' + '3000')
+  console.log('Express server listening on port 3000')
 })
 
 module.exports = app
