@@ -114,44 +114,35 @@ export default {
       const packagesToInstall = packages.join(' ')
       let cmd
 
-      console.log(name, packages)
-      this.$toast.info('probando...')
+      this.$toast.info(`Installing ${name}...`)
 
       if (os.type() === 'Linux') {
         cmd = 'LANG_ALL=C echo "y" | migasfree install ' + packagesToInstall
       } else if (os.type() === 'Window_NT') {
         cmd = 'migasfree install ' + packagesToInstall
       }
-      console.log(cmd)
 
-      if (os.type() === 'Linux') {
-        process = spawn('bash', ['-c', cmd])
-      } else if (os.type() === 'Window_NT') {
-        process = spawn('cmd', ['/C', cmd])
-      }
-
-      process.stdout.on('data', data => {
-        console.log(data.toString())
-      })
-
-      process.stderr.on('data', data => {
-        console.log(data.toString())
-      })
-
-      process.on('exit', code => {
-        console.log(code)
+      this.$store.dispatch('run', {
+        cmd,
+        text: `Install ${name}`
       })
     },
     removeApp(name, packages) {
       const packagesToRemove = packages.join(' ')
       let cmd
 
-      console.log(name, packages)
+      this.$toast.info(`Removing ${name}...`)
+
       if (os.type() === 'Linux') {
         cmd = 'LANG_ALL=C echo "y" | migasfree purge ' + packagesToRemove
       } else if (os.type() === 'Window_NT') {
         cmd = 'migasfree purge ' + packagesToRemove
       }
+
+      this.$store.dispatch('run', {
+        cmd,
+        text: `Remove ${name}`
+      })
     },
     defaultIcon(event) {
       event.target.src = '/img/migasfree-play.svg'
