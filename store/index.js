@@ -83,10 +83,7 @@ const createStore = () => {
         )
         vuexContext.commit('setMoreComputerInfo', moreComputerInfo)
 
-        const availablePackages = await context.app.$axios.$get(
-          `${vuexContext.state.internalApi}/packages/available`
-        )
-        vuexContext.commit('setAvailablePackages', availablePackages)
+        await vuexContext.dispatch('setAvailablePackages')
 
         const publicApi = `${baseDomain}${vuexContext.state.publicApi.prefix}`
 
@@ -142,6 +139,12 @@ const createStore = () => {
 
         return `Bearer ${response.token}`
       },
+      async setAvailablePackages(vuexContext) {
+        let response = await this.$axios.$get(
+          `${vuexContext.state.internalApi}/packages/available`
+        )
+        vuexContext.commit('setAvailablePackages', response)
+      },
       async setInstalledPackages(vuexContext) {
         let response = await this.$axios.$post(
           `${vuexContext.state.internalApi}/packages/installed`,
@@ -187,14 +190,12 @@ const createStore = () => {
           vuexContext.state.executions.log
         )
       },
-      run(vuexContext, { cmd, text, id = null }) {
+      run(vuexContext, { cmd, text, element = null }) {
         if (vuexContext.state.executions.isRunningCommand) {
           this.$toast.info('please wait, other process is running!!!')
           return
         }
         this.commit('startedCmd')
-
-        // $('#' + id).addClass('blink') // FIXME floating action button
 
         const os = require('os')
         const spawn = require('child_process').spawn
@@ -227,6 +228,8 @@ const createStore = () => {
 
         // when the spawn child process exits, check if there were any errors
         process.on('exit', code => {
+          if (element) element.disabled = false
+
           if (code !== 0) {
             // Syntax error
             this.$toast.error(`Error: ${code} ${cmd}`)
@@ -247,7 +250,10 @@ const createStore = () => {
             }
           }
 
-          // $('#' + id).removeClass('blink')  // FIXME FAB
+          if (cmd.includes('sync')) {
+            console.log('mirando available packages')
+            vuexContext.dispatch('setAvailablePackages')
+          }
 
           this.dispatch('setExecutions')
           this.commit('finishedCmd')
