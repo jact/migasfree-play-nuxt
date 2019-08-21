@@ -1,87 +1,114 @@
 <template>
-  <div class="no-print">
-    <center>
-      <p>
-        <img src="/img/migasfree-play.svg" id="logo" />
-      </p>
-      <p id="app-name">{{ appName }} {{ appVersion }}</p>
-      <p>{{ appDescription }}</p>
-      <p>{{ appCopyright }}</p>
-      <p>{{ appAuthors }}</p>
-    </center>
+  <div>
+    <div class="no-print">
+      <center>
+        <p>
+          <img src="/img/migasfree-play.svg" id="logo" />
+        </p>
+        <p id="app-name">{{ appName }} {{ appVersion }}</p>
+        <p>{{ appDescription }}</p>
+        <p>{{ appCopyright }}</p>
+        <p>{{ appAuthors }}</p>
+      </center>
 
-    <div class="ui horizontal centered card">
-      <div class="content">
-        <div class="header">
-          <i class="user icon" />
-          {{ $store.state.computer.user }}
+      <div class="ui horizontal centered card">
+        <div class="content">
+          <div class="header">
+            <i class="user icon" />
+            {{ $store.state.computer.user }}
+          </div>
+          <div class="description" data-tooltip="Última sincronización">
+            <i class="calendar check outline icon"></i>
+            {{ syncEndDate }}
+          </div>
         </div>
-        <div class="description" data-tooltip="Última sincronización">
-          <i class="calendar check outline icon"></i>
-          {{ syncEndDate }}
+      </div>
+
+      <div class="ui horizontal centered card">
+        <div class="content">
+          <div class="header">
+            <i :class="computerIcon" />
+            {{ $store.state.computer.data.product }}
+          </div>
+          <div class="description" data-tooltip="Hardware">
+            <p>
+              <i class="microchip icon" />
+              {{ $store.state.computer.data.cpu }}
+            </p>
+            <p>
+              <i class="memory icon" />
+              {{ computerRam }}
+            </p>
+            <p>
+              <i class="hdd icon" />
+              {{ computerStorage }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ui horizontal centered card">
+        <div class="content">
+          <div class="header">
+            <i class="info circle icon" />
+            {{ $store.state.computer.data.fqdn }}
+          </div>
+          <div class="description" data-tooltip="Datos de red">
+            <p>
+              <i class="at icon" />
+              {{ $store.state.computer.data.ip_address }}
+            </p>
+            <p>{{ $store.state.computer.mask }} ({{ $store.state.computer.network }})</p>
+            <p>{{ computerMac }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ui horizontal centered card">
+        <div class="content">
+          <div class="header">
+            <i class="server icon" />
+            {{ $store.state.host }}
+          </div>
+          <div class="description" data-tooltip="Datos de migasfree">
+            <p>
+              <i class="sitemap icon" />
+              {{ $store.state.computer.project }}
+            </p>
+            <p>
+              <i class="hashtag icon" />
+              {{ computerId }}
+            </p>
+            <p>
+              <i class="flag icon" />
+              {{ $store.state.computer.data.status }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="ui horizontal centered card">
-      <div class="content">
-        <div class="header">
-          <i :class="computerIcon" />
-          {{ $store.state.computer.data.product }}
+    <div class="ui items">
+      <div class="item">
+        <div class="image">
+          <qrcode :value="qrCode" :options="{ width: 150, errorCorrectionLevel: 'low' }"></qrcode>
         </div>
-        <div class="description" data-tooltip="Hardware">
-          <p>
-            <i class="microchip icon" />
-            {{ $store.state.computer.data.cpu }}
-          </p>
-          <p>
-            <i class="memory icon" />
-            {{ computerRam }}
-          </p>
-          <p>
-            <i class="hdd icon" />
-            {{ computerStorage }}
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ui horizontal centered card">
-      <div class="content">
-        <div class="header">
-          <i class="info circle icon" />
-          {{ $store.state.computer.data.fqdn }}
-        </div>
-        <div class="description" data-tooltip="Datos de red">
-          <p>
-            <i class="at icon" />
-            {{ $store.state.computer.data.ip_address }}
-          </p>
-          <p>{{ $store.state.computer.mask }} ({{ $store.state.computer.network }})</p>
-          <p>{{ computerMac }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="ui horizontal centered card">
-      <div class="content">
-        <div class="header">
-          <i class="server icon" />
-          {{ $store.state.host }}
-        </div>
-        <div class="description" data-tooltip="Datos de migasfree">
-          <p>
-            <i class="sitemap icon" />
-            {{ $store.state.computer.project }}
-          </p>
-          <p>
-            <i class="hashtag icon" />
-            {{ computerId }}
-          </p>
-          <p>
-            <i class="flag icon" />
-            {{ $store.state.computer.data.status }}
-          </p>
+        <div class="content">
+          <div class="header">{{ $store.state.computer.name }}</div>
+          <div class="description">
+            <p>{{ $store.state.computer.uuid }}</p>
+            <p>{{ $store.state.host }}</p>
+            <p>{{ $store.state.computer.helpdesk }}</p>
+          </div>
+          <div class="extra">
+            <button
+              class="ui icon positive button right floated"
+              data-tooltip="Imprimir"
+              data-position="top center"
+            >
+              <i class="print icon" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -99,11 +126,18 @@
 </style>
 
 <script>
+import Vue from 'vue'
+import VueQrcode from '@chenfengyuan/vue-qrcode'
 const app = require('../package.json')
 const dateFormat = require('dateformat')
 
+Vue.component(VueQrcode.name, VueQrcode)
+
 export default {
   name: 'Info',
+  components: {
+    VueQrcode
+  },
   data() {
     return {
       appName: app.name,
@@ -142,6 +176,15 @@ export default {
     },
     computerId() {
       return `CID-${this.$store.state.computer.cid}`
+    },
+    qrCode() {
+      let info = {
+        model: 'Computer',
+        id: this.$store.state.computer.cid,
+        server: this.$store.state.host
+      }
+
+      return JSON.stringify(info)
     }
   },
   methods: {
