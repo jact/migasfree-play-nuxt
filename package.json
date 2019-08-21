@@ -17,6 +17,7 @@
     "build": "nuxt build && electron-builder"
   },
   "dependencies": {
+    "@chenfengyuan/vue-qrcode": "^1.0.1",
     "@nuxtjs/axios": "^5.5.4",
     "@nuxtjs/markdownit": "^1.2.6",
     "@nuxtjs/toast": "^3.2.1",
