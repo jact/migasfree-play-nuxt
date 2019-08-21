@@ -13,7 +13,7 @@ function replaceAll(str, find, replace) {
 }
 
 function replaceColors(txt) {
-  txt = replaceAll(txt, '\u001b[92m', "<span class='console-section'>")
+  txt = replaceAll(txt, '\u001b[92m', "<span class='ui green text'>") // ok
   txt = replaceAll(txt, '\u001b[93m', "<span class='ui yellow text'>") // warning
   txt = replaceAll(txt, '\u001b[91m', "<span class='ui red text'>") // error
   txt = replaceAll(txt, '\u001b[32m', "<span class='ui blue text'>") // info
@@ -31,7 +31,8 @@ const createStore = () => {
       tokenAuth: {
         url: '/token-auth/',
         user: 'migasfree-play',
-        password: 'migasfree-play'
+        password: 'migasfree-play',
+        value: ''
       },
       publicApi: {
         prefix: '/api/v1/public',
@@ -41,7 +42,8 @@ const createStore = () => {
       tokenApi: {
         prefix: '/api/v1/token',
         apps: '/catalog/apps/available/?cid=',
-        categories: '/catalog/apps/categories/'
+        categories: '/catalog/apps/categories/',
+        computer: '/computers/'
       },
       internalApi: 'http://localhost:3000',
       computer: {
@@ -50,7 +52,8 @@ const createStore = () => {
         cid: 4928, // FIXME 0 by default
         project: '',
         user: '',
-        link: ''
+        link: '',
+        data: {}
       },
       serverVersion: '',
       packages: {
@@ -93,8 +96,9 @@ const createStore = () => {
         vuexContext.commit('setServerVersion', serverInfo.version)
 
         const tokenApi = `${baseDomain}${vuexContext.state.tokenApi.prefix}`
+        await vuexContext.dispatch('getToken')
         const headers = {
-          Authorization: vuexContext.dispatch('getToken')
+          Authorization: vuexContext.state.tokenAuth.value
         }
 
         await new Promise((resolve, reject) => {
@@ -107,11 +111,21 @@ const createStore = () => {
           })
         })
 
+        const computerData = await context.app.$axios
+          .$get(
+            `${tokenApi}${vuexContext.state.tokenApi.computer}${vuexContext.state.computer.cid}/`,
+            { headers }
+          )
+          .catch(error => {
+            console.log(error) // TODO
+          })
+        vuexContext.commit('setComputerData', computerData)
+
         await vuexContext.dispatch('setInstalledPackages')
 
         const categories = await context.app.$axios.$get(
           `${tokenApi}${vuexContext.state.tokenApi.categories}`,
-          headers
+          { headers }
         )
         vuexContext.commit('setCategories', categories)
 
@@ -137,7 +151,7 @@ const createStore = () => {
           }
         }
 
-        return `Bearer ${response.token}`
+        vuexContext.commit('setToken', response.token)
       },
       async setAvailablePackages(vuexContext) {
         let response = await this.$axios.$get(
@@ -157,7 +171,7 @@ const createStore = () => {
         { url, results, headers, resolve, reject }
       ) {
         await this.$axios
-          .$get(url, headers)
+          .$get(url, { headers })
           .then(response => {
             const retrivedResults = results.concat(response.results)
             if (response.next !== null) {
@@ -275,6 +289,9 @@ const createStore = () => {
       }
     },
     mutations: {
+      setToken(state, value) {
+        state.tokenAuth.value = `Token ${value}`
+      },
       setComputerInfo(state, value) {
         state.computer.uuid = value.uuid
         state.computer.name = value.computer_name
@@ -289,6 +306,9 @@ const createStore = () => {
         state.computer.name = value.search
         state.computer.link += state.computer.cid + '/'
         // FIXME more data
+      },
+      setComputerData(state, value) {
+        state.computer.data = value
       },
       setServerVersion(state, value) {
         state.serverVersion = value
