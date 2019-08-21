@@ -55,6 +55,7 @@ const createStore = () => {
         link: '',
         mask: '',
         network: '',
+        helpdesk: '',
         data: {}
       },
       serverVersion: '',
@@ -127,7 +128,6 @@ const createStore = () => {
             console.log(error) // TODO
           })
         vuexContext.commit('setComputerData', computerData)
-        console.log(vuexContext.state.computer)
 
         await vuexContext.dispatch('setInstalledPackages')
 
@@ -273,7 +273,6 @@ const createStore = () => {
           }
 
           if (cmd.includes('sync')) {
-            console.log('mirando available packages')
             vuexContext.dispatch('setAvailablePackages')
           }
 
@@ -313,6 +312,7 @@ const createStore = () => {
         // state.computer.cid = value.id // FIXME
         state.computer.name = value.search
         state.computer.link += state.computer.cid + '/'
+        state.computer.helpdesk = value.helpdesk
         // FIXME more data
       },
       setComputerData(state, value) {
