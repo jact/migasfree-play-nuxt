@@ -1,8 +1,9 @@
 {
   "name": "migasfree-play",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Migasfree Client front-end. Allow install/uninstall available applications and printers.",
   "author": "Jose Antonio Chavarría <jachavar@gmail.com>",
+  "copyright": "© 2017-2019 migasfree team",
   "private": true,
   "main": "main.js",
   "build": {
