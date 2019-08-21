@@ -48,11 +48,13 @@ const createStore = () => {
       internalApi: 'http://localhost:3000',
       computer: {
         name: '',
-        uuid: 'B18268A8-8CD2-11E6-9C43-BC00002E0000', //'',
-        cid: 4928, // FIXME 0 by default
+        uuid: 'E0A6D7DE-8CEE-11E6-9C43-BC00002E0000', //'', // FIXME empty by default
+        cid: 4609, // FIXME 0 by default
         project: '',
         user: '',
         link: '',
+        mask: '',
+        network: '',
         data: {}
       },
       serverVersion: '',
@@ -80,6 +82,11 @@ const createStore = () => {
           `${vuexContext.state.internalApi}/preferences/server`
         )
         vuexContext.commit('setComputerInfo', computerInfo)
+
+        const computerNetwork = await context.app.$axios.$get(
+          `${vuexContext.state.internalApi}/computer/network`
+        )
+        vuexContext.commit('setComputerNetwork', computerNetwork)
 
         const moreComputerInfo = await context.app.$axios.$get(
           `${baseDomain}${vuexContext.state.publicApi.computerInfo}${vuexContext.state.computer.uuid}`
@@ -120,6 +127,7 @@ const createStore = () => {
             console.log(error) // TODO
           })
         vuexContext.commit('setComputerData', computerData)
+        console.log(vuexContext.state.computer)
 
         await vuexContext.dispatch('setInstalledPackages')
 
@@ -309,6 +317,10 @@ const createStore = () => {
       },
       setComputerData(state, value) {
         state.computer.data = value
+      },
+      setComputerNetwork(state, value) {
+        state.computer.mask = value.mask
+        state.computer.network = value.network
       },
       setServerVersion(state, value) {
         state.serverVersion = value
