@@ -24,6 +24,17 @@ console.log(`Nuxt working on ${_NUXT_URL_}`)
 // Instantiate Express App
 const internalApi = require(__dirname + '/api/index')
 
+const openExternalLinksInOSBrowser = (event, url) => {
+  if (
+    url.match(/.*localhost.*/gi) === null &&
+    (url.startsWith('http:') || url.startsWith('https:'))
+  ) {
+    event.preventDefault()
+    const open = require('open')
+    open(url)
+  }
+}
+
 /*
  ** Electron
  */
@@ -43,6 +54,10 @@ const newWin = () => {
   })
   electron.Menu.setApplicationMenu(null)
   win.on('closed', () => (win = null))
+
+  win.webContents.on('new-window', openExternalLinksInOSBrowser)
+  win.webContents.on('will-navigate', openExternalLinksInOSBrowser)
+
   if (config.dev) {
     // Install vue dev tool and open chrome dev tools
     const {
