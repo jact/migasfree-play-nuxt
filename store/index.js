@@ -358,7 +358,10 @@ const createStore = () => {
       },
       setExecutionsLog(state, value) {
         state.executions.log = value
-        if (value.length) state.executions.lastId = value[value.length - 1].id
+        if (Object.keys(value).length)
+          state.executions.lastId = Object.keys(value)[
+            Object.keys(value).length - 1
+          ]
       },
       startedCmd(state) {
         state.executions.isRunningCommand = true
