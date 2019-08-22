@@ -7,9 +7,23 @@
   "private": true,
   "main": "main.js",
   "build": {
-    "appId": "",
+    "appId": "com.electron.${name}",
     "directories": {
       "buildResources": "static"
+    },
+    "linux": {
+      "target": "deb",
+      "category": "System"
+    },
+    "deb": {
+      "depends": [
+        "migasfree-client (>= 5.0)",
+        "sudo",
+        "bash",
+        "cron"
+      ],
+      "packageCategory": "utils",
+      "priority": "extra"
     }
   },
   "scripts": {
