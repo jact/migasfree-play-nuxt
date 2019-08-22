@@ -56,10 +56,12 @@
           <div class="description" data-tooltip="Datos de red">
             <p>
               <i class="at icon" />
-              {{ $store.state.computer.data.ip_address }}
+              {{ $store.state.computer.data.ip_address }} / {{ $store.state.computer.mask }} ({{ $store.state.computer.network }})
             </p>
-            <p>{{ $store.state.computer.mask }} ({{ $store.state.computer.network }})</p>
-            <p>{{ computerMac }}</p>
+            <p>
+              <i class="exchange alternate rotated icon" />
+              {{ computerMac }}
+            </p>
           </div>
         </div>
       </div>
@@ -88,26 +90,32 @@
       </div>
     </div>
 
-    <div class="ui items">
-      <div class="item">
+    <div id="qr" class="ui grid">
+      <div class="two wide column"></div>
+      <div class="three wide column bordered">
         <div class="image">
-          <qrcode :value="qrCode" :options="{ width: 150, errorCorrectionLevel: 'low' }"></qrcode>
+          <qrcode :value="qrCode" :options="{ width: 140, errorCorrectionLevel: 'low' }"></qrcode>
         </div>
-        <div class="content">
-          <div class="header">{{ $store.state.computer.name }}</div>
-          <div class="description">
-            <p>{{ $store.state.computer.uuid }}</p>
-            <p>{{ $store.state.host }}</p>
-            <p>{{ $store.state.computer.helpdesk }}</p>
-          </div>
-          <div class="extra">
-            <button
-              class="ui icon positive button right floated"
-              data-tooltip="Imprimir"
-              data-position="top center"
-            >
-              <i class="print icon" />
-            </button>
+      </div>
+      <div class="nine wide column bordered">
+        <div class="item">
+          <div class="content">
+            <div class="header">{{ $store.state.computer.name }}</div>
+            <div class="description">
+              <p>{{ $store.state.computer.uuid }}</p>
+              <p>{{ $store.state.host }}</p>
+              <p>{{ $store.state.computer.helpdesk }}</p>
+            </div>
+            <div class="extra">
+              <button
+                class="ui icon positive button right floated"
+                data-tooltip="Imprimir"
+                data-position="top center"
+                @click="printLabel"
+              >
+                <i class="print icon" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -122,6 +130,24 @@
 
 #app-name {
   font-size: 150%;
+}
+
+#qr {
+  margin: 14px 0;
+}
+
+.three.bordered {
+  border: 1px solid #000;
+  border-right: 0;
+}
+
+.nine.bordered {
+  border: 1px solid #000;
+  border-left: 0;
+}
+
+.nine .item {
+  padding-top: 18px;
 }
 </style>
 
@@ -190,6 +216,9 @@ export default {
   methods: {
     bytesToGigas(value) {
       return (value / 1024 / 1024 / 1024).toFixed(1)
+    },
+    printLabel() {
+      window.print()
     }
   }
 }
