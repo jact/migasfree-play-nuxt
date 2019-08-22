@@ -1,5 +1,5 @@
 <template>
-  <details :id="id">
+  <details :id="id" :open="id === $store.state.executions.lastId ? true : false">
     <summary>
       {{ command }}
       <div class="date">{{ displayDate }}</div>
@@ -55,6 +55,9 @@ export default {
     displayDate() {
       return dateFormat(this.id, 'yyyy-mm-dd HH:MM:ss')
     }
+  },
+  mounted() {
+    console.log(this.id, this.$store.state.executions.lastId)
   }
 }
 </script>
