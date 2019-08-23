@@ -245,11 +245,6 @@ const createStore = () => {
 
         this.commit('addExecution', text)
 
-        /*$('#console').append(renderRun(global.run_idx))
-      $(
-        '#console > li:nth-child(' + global.idx + ') > div.collapsible-header'
-      ).click()*/
-
         process.stdout.on('data', data => {
           this.commit('appendExecutionText', replaceColors(data.toString()))
         })
