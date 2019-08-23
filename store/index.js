@@ -28,7 +28,7 @@ const createStore = () => {
   return new Vuex.Store({
     state: () => ({
       protocol: 'http', // FIXME
-      host: 'localhost:1234', // FIXME
+      host: 'localhost:1234', // FIXME '' by default
       tokenAuth: {
         url: '/token-auth/',
         user: 'migasfree-play',
@@ -47,6 +47,11 @@ const createStore = () => {
         computer: '/computers/'
       },
       internalApi: 'http://localhost:3000',
+      initialUrl: {
+        baseDomain: '',
+        public: '',
+        token: ''
+      },
       computer: {
         name: '',
         uuid: 'E0A6D7DE-8CEE-11E6-9C43-BC00002E0000', //'', // FIXME empty by default
@@ -78,41 +83,22 @@ const createStore = () => {
     }),
     actions: {
       async nuxtServerInit(vuexContext, context) {
-        const baseDomain = `${vuexContext.state.protocol}://${vuexContext.state.host}`
+        vuexContext.commit('setInitialUrl')
 
-        const computerInfo = await context.app.$axios.$get(
-          `${vuexContext.state.internalApi}/preferences/server`
-        )
-        vuexContext.commit('setComputerInfo', computerInfo)
-
-        const computerNetwork = await context.app.$axios.$get(
-          `${vuexContext.state.internalApi}/computer/network`
-        )
-        vuexContext.commit('setComputerNetwork', computerNetwork)
-
-        const moreComputerInfo = await context.app.$axios.$get(
-          `${baseDomain}${vuexContext.state.publicApi.computerInfo}${vuexContext.state.computer.uuid}`
-        )
-        vuexContext.commit('setMoreComputerInfo', moreComputerInfo)
-
+        await vuexContext.dispatch('computerInfo')
+        await vuexContext.dispatch('computerNetwork')
+        await vuexContext.dispatch('moreComputerInfo')
         await vuexContext.dispatch('setAvailablePackages')
+        await vuexContext.dispatch('serverInfo')
 
-        const publicApi = `${baseDomain}${vuexContext.state.publicApi.prefix}`
-
-        const serverInfo = await context.app.$axios.$post(
-          `${publicApi}${vuexContext.state.publicApi.serverInfo}`
-        )
-        vuexContext.commit('setServerVersion', serverInfo.version)
-
-        const tokenApi = `${baseDomain}${vuexContext.state.tokenApi.prefix}`
         await vuexContext.dispatch('getToken')
+
         const headers = {
           Authorization: vuexContext.state.tokenAuth.value
         }
-
         await new Promise((resolve, reject) => {
           vuexContext.dispatch('getAllResults', {
-            url: `${tokenApi}${vuexContext.state.tokenApi.apps}${vuexContext.state.computer.cid}`,
+            url: `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.apps}${vuexContext.state.computer.cid}`,
             headers,
             results: [],
             resolve,
@@ -120,25 +106,45 @@ const createStore = () => {
           })
         })
 
-        const computerData = await context.app.$axios
+        await vuexContext.dispatch('computerData')
+        await vuexContext.dispatch('setInstalledPackages')
+        await vuexContext.dispatch('setCategories')
+        await vuexContext.dispatch('getExecutions')
+      },
+      async computerInfo(vuexContext) {
+        let response = await this.$axios.$get(
+          `${vuexContext.state.internalApi}/preferences/server`
+        )
+        vuexContext.commit('setComputerInfo', response)
+      },
+      async computerNetwork(vuexContext) {
+        let response = await this.$axios.$get(
+          `${vuexContext.state.internalApi}/computer/network`
+        )
+        vuexContext.commit('setComputerNetwork', response)
+      },
+      async moreComputerInfo(vuexContext) {
+        let response = await this.$axios.$get(
+          `${vuexContext.state.initialUrl.baseDomain}${vuexContext.state.publicApi.computerInfo}${vuexContext.state.computer.uuid}`
+        )
+        vuexContext.commit('setMoreComputerInfo', response)
+      },
+      async computerData(vuexContext) {
+        let response = await this.$axios
           .$get(
-            `${tokenApi}${vuexContext.state.tokenApi.computer}${vuexContext.state.computer.cid}/`,
-            { headers }
+            `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.computer}${vuexContext.state.computer.cid}/`,
+            { headers: { Authorization: vuexContext.state.tokenAuth.value } }
           )
           .catch(error => {
             console.log(error) // TODO
           })
-        vuexContext.commit('setComputerData', computerData)
-
-        await vuexContext.dispatch('setInstalledPackages')
-
-        const categories = await context.app.$axios.$get(
-          `${tokenApi}${vuexContext.state.tokenApi.categories}`,
-          { headers }
+        vuexContext.commit('setComputerData', response)
+      },
+      async serverInfo(vuexContext) {
+        let response = await this.$axios.$post(
+          `${vuexContext.state.initialUrl.public}${vuexContext.state.publicApi.serverInfo}`
         )
-        vuexContext.commit('setCategories', categories)
-
-        await vuexContext.dispatch('getExecutions')
+        vuexContext.commit('setServerVersion', response.version)
       },
       async getToken(vuexContext) {
         let response = await this.$axios.$get(
@@ -200,6 +206,13 @@ const createStore = () => {
             console.log(error)
             reject('Something wrong. Please refresh the page and try again.')
           })
+      },
+      async setCategories(vuexContext) {
+        let response = await this.$axios.$get(
+          `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.categories}`,
+          { headers: { Authorization: vuexContext.state.tokenAuth.value } }
+        )
+        vuexContext.commit('setCategories', response)
       },
       async getExecutions(vuexContext) {
         let response = await this.$axios.$get(
@@ -297,6 +310,11 @@ const createStore = () => {
       }
     },
     mutations: {
+      setInitialUrl(state) {
+        state.initialUrl.baseDomain = `${state.protocol}://${state.host}`
+        state.initialUrl.public = `${state.initialUrl.baseDomain}${state.publicApi.prefix}`
+        state.initialUrl.token = `${state.initialUrl.baseDomain}${state.tokenApi.prefix}`
+      },
       setToken(state, value) {
         state.tokenAuth.value = `Token ${value}`
       },
@@ -305,7 +323,6 @@ const createStore = () => {
         state.computer.name = value.computer_name
         state.computer.user = value.user
         state.computer.project = 'AZL-16' // value.project // FIXME
-        state.computer.link = `${state.protocol}`
         // state.host = value.server // TODO
         state.computer.link = `${state.protocol}://${state.host}/admin/server/computer/`
       },
