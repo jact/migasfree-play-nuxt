@@ -44,7 +44,7 @@ const path = require('path')
 const app = electron.app
 const newWin = () => {
   win = new electron.BrowserWindow({
-    icon: path.join(__dirname, 'static/icon.png'),
+    icon: path.join(__dirname, 'static/img/migasfree-play.png'),
     width: 800,
     height: 800,
     webPreferences: {
