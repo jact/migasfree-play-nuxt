@@ -10,7 +10,9 @@ const tokenRouter = require('./routes/token')
 const executionsRouter = require('./routes/executions')
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false, limit: '5mb' }))
+app.use(
+  bodyParser.urlencoded({ extended: true, limit: '5mb', parameterLimit: 50000 })
+)
 app.use(bodyParser.json({ limit: '5mb' }))
 
 app.use('/packages', packagesRouter)
