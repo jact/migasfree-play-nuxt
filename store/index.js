@@ -82,15 +82,15 @@ const createStore = () => {
       }
     }),
     actions: {
-      async nuxtServerInit(vuexContext, context) {
+      async nuxtServerInit(vuexContext) {
         vuexContext.commit('setInitialUrl')
 
         await vuexContext.dispatch('computerInfo')
         await vuexContext.dispatch('computerNetwork')
         await vuexContext.dispatch('moreComputerInfo')
+
         await vuexContext.dispatch('setAvailablePackages')
         await vuexContext.dispatch('serverInfo')
-
         await vuexContext.dispatch('getToken')
 
         const headers = {
