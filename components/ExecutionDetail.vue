@@ -56,8 +56,10 @@ export default {
       return dateFormat(this.id, 'yyyy-mm-dd HH:MM:ss')
     }
   },
-  mounted() {
-    console.log(this.id, this.$store.state.executions.lastId)
+  watch: {
+    text: (newVal, oldVal) => {
+      window.scrollTo(0, document.getElementById('main').scrollHeight)
+    }
   }
 }
 </script>
