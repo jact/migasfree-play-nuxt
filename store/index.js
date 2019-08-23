@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import Vuex from 'vuex'
 const dateFormat = require('dateformat')
 
@@ -372,10 +373,10 @@ const createStore = () => {
       addExecution(state, command) {
         let now = new Date()
         state.executions.lastId = dateFormat(now, 'isoDateTime')
-        state.executions.log[state.executions.lastId] = {
+        Vue.set(state.executions.log, state.executions.lastId, {
           command,
           text: ''
-        }
+        })
       },
       appendExecutionText(state, text) {
         state.executions.log[state.executions.lastId]['text'] += text
