@@ -13,8 +13,9 @@
         data-position="top center"
         @click="synchronize($event)"
       >
-        <i class="play icon"></i>
+        <i class="play icon" />
       </button>
+      <Login />
     </div>
   </div>
 </template>
@@ -37,10 +38,12 @@
 
 <script>
 import Menu from '@/components/Menu.vue'
+import Login from '@/components/Login.vue'
 
 export default {
   components: {
-    Menu
+    Menu,
+    Login
   },
   methods: {
     synchronize(event) {
