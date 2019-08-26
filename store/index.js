@@ -79,10 +79,22 @@ const createStore = () => {
         lastId: '',
         isRunningCommand: false,
         error: ''
+      },
+      preferences: {
+        language: 'es',
+        showSyncDetails: false,
+        showApps: true,
+        showDevices: true,
+        showDetails: true,
+        showPreferences: true,
+        showInfo: true,
+        showHelp: true
       }
     }),
     actions: {
       async nuxtServerInit(vuexContext) {
+        await vuexContext.dispatch('readPreferences')
+
         vuexContext.commit('setInitialUrl')
 
         await vuexContext.dispatch('computerInfo')
@@ -110,6 +122,24 @@ const createStore = () => {
         await vuexContext.dispatch('setInstalledPackages')
         await vuexContext.dispatch('setCategories')
         await vuexContext.dispatch('getExecutions')
+      },
+      async readPreferences(vuexContext) {
+        let response = await this.$axios.$get(
+          `${vuexContext.state.internalApi}/preferences`
+        )
+        vuexContext.commit('setPreferences', response)
+      },
+      savePreferences(vuexContext) {
+        this.$axios.$post(`${vuexContext.state.internalApi}/preferences`, {
+          language: vuexContext.state.preferences.language,
+          show_sync_details: vuexContext.state.preferences.showSyncDetails,
+          show_apps: vuexContext.state.preferences.showApps,
+          show_devices: vuexContext.state.preferences.showDevices,
+          show_details: vuexContext.state.preferences.showDetails,
+          show_preferences: vuexContext.state.preferences.showPreferences,
+          show_info: vuexContext.state.preferences.showInfo,
+          show_help: vuexContext.state.preferences.showHelp
+        })
       },
       async computerInfo(vuexContext) {
         let response = await this.$axios.$get(
@@ -305,6 +335,22 @@ const createStore = () => {
       }
     },
     mutations: {
+      setPreferences(state, value) {
+        state.preferences.language = value.language
+        state.preferences.showSyncDetails = value.show_sync_details
+        state.preferences.showApps = value.show_apps
+        state.preferences.showDevices = value.show_devices
+        state.preferences.showDetails = value.show_sync_details
+        state.preferences.showPreferences = value.show_preferences
+        state.preferences.showInfo = value.show_info
+        state.preferences.showHelp = value.show_help
+      },
+      setLanguage(state, value) {
+        state.preferences.language = value
+      },
+      setShowSyncDetails(state, value) {
+        state.preferences.showSyncDetails = value
+      },
       setInitialUrl(state) {
         state.initialUrl.baseDomain = `${state.protocol}://${state.host}`
         state.initialUrl.public = `${state.initialUrl.baseDomain}${state.publicApi.prefix}`
