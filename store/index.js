@@ -89,6 +89,9 @@ const createStore = () => {
         showPreferences: true,
         showInfo: true,
         showHelp: true
+      },
+      user: {
+        isPrivileged: false
       }
     }),
     actions: {
@@ -318,6 +321,15 @@ const createStore = () => {
           this.dispatch('setExecutions')
           this.commit('finishedCmd')
         })
+      },
+      async checkUser(vuexContext, { user, password }) {
+        let response = await this.$axios.$post(
+          `${vuexContext.state.internalApi}/user/check`,
+          { user, password }
+        )
+        if (response.is_privileged) {
+          vuexContext.commit('privilegedUser')
+        }
       }
     },
     getters: {
@@ -441,6 +453,9 @@ const createStore = () => {
       },
       appendExecutionError(state, text) {
         state.executions.error += text
+      },
+      privilegedUser(state) {
+        state.user.isPrivileged = true
       }
     }
   })
