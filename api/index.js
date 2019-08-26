@@ -8,6 +8,7 @@ const preferencesRouter = require('./routes/preferences')
 const computerRouter = require('./routes/computer')
 const tokenRouter = require('./routes/token')
 const executionsRouter = require('./routes/executions')
+const userRouter = require('./routes/user')
 
 app.use(express.json())
 app.use(
@@ -20,6 +21,7 @@ app.use('/preferences', preferencesRouter)
 app.use('/computer', computerRouter)
 app.use('/token', tokenRouter)
 app.use('/executions', executionsRouter)
+app.use('/user', userRouter)
 
 // error handler
 app.use((err, req, res, next) => {
