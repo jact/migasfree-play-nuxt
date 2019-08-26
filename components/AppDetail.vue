@@ -18,13 +18,13 @@
       <div v-else v-html="$md.render(truncatedDescription)" class="details"></div>
       <div class="extra content">
         <button
-          v-if="level === 'U' && isAvailable && !isInstalled && packages.length > 0"
+          v-if="isInstallable"
           class="ui icon positive button"
           data-tooltip="Instalar"
           data-position="bottom center"
           @click="installApp($event, name, packages)"
         >
-          <i class="download icon"></i>
+          <i class="download icon" />
         </button>
         <button
           v-if="isInstalled"
@@ -33,15 +33,16 @@
           data-position="bottom center"
           @click="removeApp($event, name, packages)"
         >
-          <i class="trash alternate icon"></i>
+          <i class="trash alternate icon" />
         </button>
         <button
-          v-if="isAvailable && level == 'A'"
+          v-if="isPrivileged"
           class="ui icon orange button"
           data-tooltip="Instalar con privilegios"
           data-position="bottom center"
+          @click="modalLogin"
         >
-          <i class="hat wizard icon"></i>
+          <i class="hat wizard icon" />
         </button>
         <button
           v-if="!isAvailable"
@@ -49,7 +50,7 @@
           data-tooltip="Bloqueado"
           data-position="bottom center"
         >
-          <i class="lock icon"></i>
+          <i class="lock icon" />
         </button>
         <span v-if="isInstalled" class="ui blue basic tag label">Instalado</span>
       </div>
@@ -62,6 +63,7 @@ details,
 .details {
   margin: 10px 0;
 }
+
 .more-info {
   margin: 5px;
 }
@@ -107,6 +109,21 @@ export default {
       return this.packages.filter(
         x => !this.$store.state.packages.available.includes(x)
       )
+    },
+    isInstallable() {
+      return (
+        (this.level === 'U' || this.$store.state.user.isPrivileged) &&
+        this.isAvailable &&
+        !this.isInstalled &&
+        this.packages.length > 0
+      )
+    },
+    isPrivileged() {
+      return (
+        this.isAvailable &&
+        this.level === 'A' &&
+        !this.$store.state.user.isPrivileged
+      )
     }
   },
   methods: {
@@ -150,6 +167,9 @@ export default {
     },
     defaultIcon(event) {
       event.target.src = '/img/migasfree-play.svg'
+    },
+    modalLogin() {
+      this.$modal.show('login')
     }
   }
 }
