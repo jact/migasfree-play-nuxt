@@ -1,0 +1,54 @@
+<template>
+  <modal name="login" :width="300" :height="220">
+    <center>
+      <form class="ui form" @submit.prevent="login">
+        <legend>Privileged computer user</legend>
+        <div class="required field ui left icon input">
+          <i class="user icon"></i>
+          <input type="text" v-model="username" placeholder="Username" autocomplete="off" />
+        </div>
+        <div class="required field ui left icon input">
+          <i class="lock icon"></i>
+          <input type="password" v-model="password" placeholder="Password" autocomplete="off" />
+        </div>
+        <div>
+          <button class="large ui positive button" type="submit">Login</button>
+        </div>
+      </form>
+    </center>
+  </modal>
+</template>
+
+<style scoped>
+legend {
+  font-size: 150%;
+  margin: 20px 0;
+}
+
+.v--modal {
+  padding: 20px !important;
+}
+</style>
+
+<script>
+export default {
+  name: 'Login',
+  data() {
+    return {
+      username: '',
+      password: ''
+    }
+  },
+  methods: {
+    login() {
+      this.$modal.hide('login')
+      if (this.username && this.password) {
+        this.$store.dispatch('checkUser', {
+          user: this.username,
+          password: this.password
+        })
+      }
+    }
+  }
+}
+</script>
