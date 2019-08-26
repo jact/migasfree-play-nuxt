@@ -26,7 +26,8 @@ router.get('/', (req, res) => {
   if (fs.existsSync(filePath)) {
     const data = fs.readFileSync(filePath, 'utf8')
 
-    res.json(JSON.parse(data))
+    if (data) res.json(JSON.parse(data))
+    else res.json(settings)
   } else {
     fs.writeFileSync(filePath, JSON.stringify(settings, null, 2))
     res.json(settings)
@@ -34,7 +35,8 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  fs.writeFileSync(filePath, req.body)
+  fs.writeFileSync(filePath, JSON.stringify(req.body, null, 2))
+  res.send()
 })
 
 router.get('/server', (req, res) => {
