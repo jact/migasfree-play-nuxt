@@ -24,6 +24,8 @@ function replaceColors(txt) {
   return txt
 }
 
+const executionsMaxLength = 5
+
 const createStore = () => {
   return new Vuex.Store({
     state: () => ({
@@ -441,12 +443,13 @@ const createStore = () => {
         state.executions.isRunningCommand = false
       },
       addExecution(state, command) {
-        let now = new Date()
-        state.executions.lastId = dateFormat(now, 'isoDateTime')
+        state.executions.lastId = dateFormat(new Date(), 'isoDateTime')
         Vue.set(state.executions.log, state.executions.lastId, {
           command,
           text: ''
         })
+        while (Object.keys(state.executions.log).length > executionsMaxLength)
+          delete state.executions.log[Object.keys(state.executions.log)[0]]
       },
       appendExecutionText(state, text) {
         state.executions.log[state.executions.lastId]['text'] += text
