@@ -50,6 +50,9 @@ export default {
       event.srcElement.parentElement.disabled = true
       this.$toast.info('Sincronizando...')
 
+      if (this.$store.state.preferences.showSyncDetails)
+        this.$router.push('/details')
+
       this.$store.dispatch('run', {
         cmd: 'migasfree sync',
         text: 'Synchronization',
