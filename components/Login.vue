@@ -1,11 +1,18 @@
 <template>
-  <modal name="login" :width="300" :height="220">
+  <modal name="login" :width="300" :height="220" @opened="toggleModal" @closed="toggleModal">
     <center>
       <form class="ui form" @submit.prevent="login">
         <legend>Privileged computer user</legend>
         <div class="required field ui left icon input">
           <i class="user icon"></i>
-          <input type="text" v-model="username" placeholder="Username" autocomplete="off" />
+          <input
+            type="text"
+            v-model="username"
+            placeholder="Username"
+            autocomplete="off"
+            ref="username"
+            autofocus
+          />
         </div>
         <div class="required field ui left icon input">
           <i class="lock icon"></i>
@@ -31,12 +38,15 @@ legend {
 </style>
 
 <script>
+import Vue from 'vue'
+
 export default {
   name: 'Login',
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      modal: false
     }
   },
   methods: {
@@ -47,6 +57,16 @@ export default {
           user: this.username,
           password: this.password
         })
+      }
+    },
+    toggleModal() {
+      this.modal = !this.modal
+    }
+  },
+  watch: {
+    modal() {
+      if (this.modal) {
+        Vue.nextTick().then(() => this.$refs.username.focus())
       }
     }
   }
