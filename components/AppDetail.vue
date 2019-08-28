@@ -27,7 +27,7 @@
           <i class="download icon" />
         </button>
         <button
-          v-if="isInstalled"
+          v-if="isRemovable"
           class="ui icon negative button"
           data-tooltip="Desinstalar"
           data-position="bottom center"
@@ -116,6 +116,12 @@ export default {
         this.isAvailable &&
         !this.isInstalled &&
         this.packages.length > 0
+      )
+    },
+    isRemovable() {
+      return (
+        this.isInstalled &&
+        (this.level === 'U' || this.$store.state.user.isPrivileged)
       )
     },
     isPrivileged() {
