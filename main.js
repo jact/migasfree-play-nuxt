@@ -47,6 +47,7 @@ const newWin = () => {
     icon: path.join(__dirname, 'static/img/migasfree-play.png'),
     width: 800,
     height: 800,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false
@@ -54,6 +55,11 @@ const newWin = () => {
   })
   electron.Menu.setApplicationMenu(null)
   win.on('closed', () => (win = null))
+
+  win.on('ready-to-show', function() {
+    win.show()
+    win.focus()
+  })
 
   win.webContents.on('new-window', openExternalLinksInOSBrowser)
   win.webContents.on('will-navigate', openExternalLinksInOSBrowser)
