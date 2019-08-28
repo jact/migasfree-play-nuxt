@@ -294,20 +294,22 @@ const createStore = () => {
 
         // when the spawn child process exits, check if there were any errors
         process.on('exit', code => {
+          const { remote } = require('electron')
+          const win = remote.getCurrentWindow()
+
           if (element) element.disabled = false
 
           if (code !== 0) {
-            // Syntax error
             this.$toast.error(`Error: ${code} ${cmd}`)
-            // win.show() // FIXME
+            win.show()
           } else {
             if (vuexContext.state.executions.error === '') {
               vuexContext.dispatch('setInstalledPackages')
 
               /*if (id == 'sync' && document.hidden) { // FAB
-              // sync ok & minimized -> exit
-              exit()
-            }*/ // FIXME
+                // sync ok & minimized -> exit
+                win.close()
+              }*/ // FIXME
             } else {
               this.$toast.error(
                 replaceColors(vuexContext.state.executions.error)
