@@ -41,6 +41,10 @@ export default {
       onlyAssignedDevices: false
     }
   },
+  mounted() {
+    this.searchDevice = this.$store.state.filters.searchDevice
+    this.onlyAssignedDevices = this.$store.state.filters.onlyAssignedDevices
+  },
   methods: {
     setSearchDevice() {
       this.$store.commit('setSearchDevice', this.searchDevice)
