@@ -40,13 +40,17 @@ export default {
         results = results.filter(
           app => app.category.id == this.$store.state.selectedCategory
         )
-      if (this.$store.state.searchApp)
+      if (this.$store.state.filters.searchApp)
         results = results.filter(
           app =>
-            app.name.toLowerCase().includes(this.$store.state.searchApp) ||
-            app.description.toLowerCase().includes(this.$store.state.searchApp)
+            app.name
+              .toLowerCase()
+              .includes(this.$store.state.filters.searchApp) ||
+            app.description
+              .toLowerCase()
+              .includes(this.$store.state.filters.searchApp)
         )
-      if (this.$store.state.onlyInstalledApps)
+      if (this.$store.state.filters.onlyInstalledApps)
         results = results.filter(
           app =>
             app.packages_to_install.length > 0 &&
