@@ -402,12 +402,17 @@ const createStore = () => {
       },
       getAppsPackages(state) {
         let packages = []
-        state.apps.forEach(function(value, index, array) {
+
+        state.apps.forEach(value => {
           if (value.packages_to_install.length > 0) {
             packages = packages.concat(value.packages_to_install)
           }
         })
+
         return packages
+      },
+      getAvailableDevices(state) {
+        return state.devices.available
       }
     },
     mutations: {
