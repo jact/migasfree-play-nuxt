@@ -46,7 +46,9 @@ const createStore = () => {
         prefix: '/api/v1/token',
         apps: '/catalog/apps/available/?cid=',
         categories: '/catalog/apps/categories/',
-        computer: '/computers/'
+        computer: '/computers/',
+        availableDevices: '/devices/devices/available/?cid=',
+        logicalDevice: '/devices/logical/available/?cid='
       },
       internalApi: 'http://localhost:3000',
       initialUrl: {
@@ -71,11 +73,15 @@ const createStore = () => {
         available: [],
         installed: []
       },
-      selectedCategory: null,
-      searchApp: null,
-      onlyInstalledApps: false,
+      filters: {
+        searchApp: null,
+        onlyInstalledApps: false,
+        searchDevice: null,
+        onlyAssignedDevices: false
+      },
       apps: [],
       categories: [],
+      selectedCategory: null,
       executions: {
         log: {},
         lastId: '',
@@ -94,6 +100,12 @@ const createStore = () => {
       },
       user: {
         isPrivileged: false
+      },
+      devices: {
+        assigned: [],
+        inflicted: [],
+        default: 0,
+        available: []
       }
     }),
     actions: {
@@ -118,6 +130,7 @@ const createStore = () => {
             url: `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.apps}${vuexContext.state.computer.cid}`,
             headers,
             results: [],
+            mutation: 'setApps',
             resolve,
             reject
           })
@@ -127,6 +140,19 @@ const createStore = () => {
         await vuexContext.dispatch('setInstalledPackages')
         await vuexContext.dispatch('setCategories')
         await vuexContext.dispatch('getExecutions')
+
+        await vuexContext.dispatch('computerDevices')
+        await new Promise((resolve, reject) => {
+          vuexContext.dispatch('getAllResults', {
+            url: `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.availableDevices}${vuexContext.state.computer.cid}`,
+            headers,
+            results: [],
+            mutation: 'setAvailableDevices',
+            resolve,
+            reject
+          })
+        })
+        await vuexContext.dispatch('getFeaturesDevices')
       },
       async readPreferences(vuexContext) {
         let response = await this.$axios.$get(
@@ -175,6 +201,17 @@ const createStore = () => {
           })
         vuexContext.commit('setComputerData', response)
       },
+      async computerDevices(vuexContext) {
+        let response = await this.$axios
+          .$get(
+            `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.computer}${vuexContext.state.computer.cid}/devices/`,
+            { headers: { Authorization: vuexContext.state.tokenAuth.value } }
+          )
+          .catch(error => {
+            console.log(error) // TODO
+          })
+        vuexContext.commit('setComputerDevices', response)
+      },
       async serverInfo(vuexContext) {
         let response = await this.$axios.$post(
           `${vuexContext.state.initialUrl.public}${vuexContext.state.publicApi.serverInfo}`
@@ -218,7 +255,7 @@ const createStore = () => {
       },
       async getAllResults(
         vuexContext,
-        { url, results, headers, resolve, reject }
+        { url, results, headers, mutation, resolve, reject }
       ) {
         await this.$axios
           .$get(url, { headers })
@@ -229,11 +266,12 @@ const createStore = () => {
                 url: response.next,
                 results: retrivedResults,
                 headers,
+                mutation,
                 resolve,
                 reject
               })
             } else {
-              vuexContext.commit('setApps', retrivedResults)
+              vuexContext.commit(mutation, retrivedResults)
               resolve(retrivedResults)
             }
           })
@@ -260,6 +298,28 @@ const createStore = () => {
           `${vuexContext.state.internalApi}/executions`,
           vuexContext.state.executions.log
         )
+      },
+      async getFeaturesDevices(vuexContext) {
+        vuexContext.state.devices.available.forEach((item, index) => {
+          vuexContext.dispatch('getLogicalDevice', { id: item.id, index })
+        })
+      },
+      async getLogicalDevice(vuexContext, { id, index }) {
+        let response = await this.$axios
+          .$get(
+            `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.logicalDevice}${vuexContext.state.computer.cid}&did=${id}`,
+            { headers: { Authorization: vuexContext.state.tokenAuth.value } }
+          )
+          .catch(error => {
+            console.log(error) // TODO
+          })
+
+        if (response.results) {
+          let payload = {}
+          payload.results = response.results
+          payload.index = index
+          vuexContext.commit('addLogicalDevices', payload)
+        }
       },
       run(vuexContext, { cmd, text, element = null }) {
         if (vuexContext.state.executions.isRunningCommand) {
@@ -397,12 +457,17 @@ const createStore = () => {
         state.computer.mask = value.mask
         state.computer.network = value.network
       },
+      setComputerDevices(state, value) {
+        state.devices.default = value.default_logical_device
+        state.devices.assigned = value.assigned_logical_devices_to_cid
+        state.devices.inflicted = value.inflicted_logical_devices
+      },
       setServerVersion(state, value) {
         state.serverVersion = value
       },
       setApps(state, value) {
         state.apps = []
-        value.forEach(function(item, index, array) {
+        value.forEach(item => {
           let filterPackages = item.packages_by_project.filter(
             packages => state.computer.project === packages.project.name
           )
@@ -411,6 +476,13 @@ const createStore = () => {
             state.apps.push(item)
           }
         })
+      },
+      setAvailableDevices(state, value) {
+        state.devices.available = value
+      },
+      addLogicalDevices(state, value) {
+        state.devices.available[value.index].logical = value.results
+        console.log(state.devices.available[value.index])
       },
       setCategories(state, value) {
         state.categories = value
@@ -426,10 +498,16 @@ const createStore = () => {
         state.selectedCategory = value
       },
       setSearchApp(state, value) {
-        state.searchApp = value
+        state.filters.searchApp = value
       },
       setOnlyInstalledApps(state, value) {
-        state.onlyInstalledApps = value
+        state.filters.onlyInstalledApps = value
+      },
+      setSearchDevice(state, value) {
+        state.filters.searchDevice = value
+      },
+      setOnlyAssignedDevices(state, value) {
+        state.filters.onlyAssignedDevices = value
       },
       setExecutionsLog(state, value) {
         state.executions.log = value
