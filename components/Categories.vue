@@ -60,6 +60,10 @@ export default {
       onlyInstalledApps: false
     }
   },
+  mounted() {
+    this.searchApp = this.$store.state.filters.searchApp
+    this.onlyInstalledApps = this.$store.state.filters.onlyInstalledApps
+  },
   computed: {
     selectedCategory() {
       return this.$store.state.selectedCategory
