@@ -1,17 +1,19 @@
 <template>
-  <div class="ui stackable cards">
+  <div>
     <DeviceFilter />
-    <DeviceDetail
-      v-for="item in devicesByFilter"
-      :key="item.id"
-      :icon="icon(item.connection.name)"
-      :name="name(item)"
-      :id="item.name"
-      :connection="item.connection.name"
-      :description="description(item.data)"
-      :ip="ipAddress(item.data)"
-      :logical="item.logical"
-    />
+    <div class="ui stackable cards">
+      <DeviceDetail
+        v-for="item in devicesByFilter"
+        :key="item.id"
+        :icon="icon(item.connection.name)"
+        :name="name(item)"
+        :id="item.name"
+        :connection="item.connection.name"
+        :description="description(item.data)"
+        :ip="ipAddress(item.data)"
+        :logical="item.logical"
+      />
+    </div>
   </div>
 </template>
 
