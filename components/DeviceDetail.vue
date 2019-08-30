@@ -15,6 +15,7 @@
             class="ui icon negative button right floated"
             data-tooltip="Desinstalar"
             data-position="bottom center"
+            @click="removeDevice(item)"
           >
             <i class="trash alternate icon" />
           </button>
@@ -24,6 +25,7 @@
           class="ui icon positive button right floated"
           data-tooltip="Instalar"
           data-position="bottom center"
+          @click="installDevice(item)"
         >
           <i class="download icon" />
         </button>
@@ -80,6 +82,26 @@ export default {
     isVisible(id) {
       if (!this.$store.state.filters.onlyAssignedDevices) return true
       else return this.isAssigned(id)
+    },
+    installDevice(item) {
+      let attributes = item.attributes
+      if (!attributes.includes(this.$store.state.computer.attribute)) {
+        attributes.push(this.$store.state.computer.attribute)
+      }
+      this.$store.dispatch('changeDeviceAttributes', {
+        id: item.id,
+        attributes
+      })
+    },
+    removeDevice(item) {
+      let attributes = item.attributes
+      attributes = attributes.filter(x => {
+        return x !== this.$store.state.computer.attribute
+      })
+      this.$store.dispatch('changeDeviceAttributes', {
+        id: item.id,
+        attributes
+      })
     }
   }
 }
