@@ -48,7 +48,8 @@ const createStore = () => {
         categories: '/catalog/apps/categories/',
         computer: '/computers/',
         availableDevices: '/devices/devices/available/?cid=',
-        logicalDevice: '/devices/logical/available/?cid=',
+        availableLogicalDevices: '/devices/logical/available/?cid=',
+        logicalDevice: '/devices/logical/',
         cidAttribute: '/attributes/?property_att__prefix=CID&value='
       },
       internalApi: 'http://localhost:3000',
@@ -345,7 +346,7 @@ const createStore = () => {
       async getLogicalDevice(vuexContext, { id, index }) {
         await this.$axios
           .$get(
-            `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.logicalDevice}${vuexContext.state.computer.cid}&did=${id}`,
+            `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.availableLogicalDevices}${vuexContext.state.computer.cid}&did=${id}`,
             { headers: { Authorization: vuexContext.state.tokenAuth.value } }
           )
           .then(data => {
@@ -354,6 +355,25 @@ const createStore = () => {
               payload.results = data.results
               payload.index = index
               vuexContext.commit('addLogicalDevices', payload)
+            }
+          })
+          .catch(error => {
+            console.log(error) // TODO
+          })
+      },
+      changeDeviceAttributes(vuexContext, { id, attributes }) {
+        this.$axios
+          .$patch(
+            `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.logicalDevice}${id}/`,
+            { attributes },
+            { headers: { Authorization: vuexContext.state.tokenAuth.value } }
+          )
+          .then(data => {
+            if (data.results) {
+              let payload = {}
+              payload.results = data.attributes
+              payload.index = id // FIXME real index
+              vuexContext.commit('setLogicalAttributes', payload)
             }
           })
           .catch(error => {
@@ -529,6 +549,13 @@ const createStore = () => {
       },
       addLogicalDevices(state, value) {
         Vue.set(state.devices.available[value.index], 'logical', value.results)
+      },
+      setLogicalAttributes(state, value) {
+        Vue.set(
+          state.devices.available[value.index].logical,
+          'attributes',
+          value.results
+        )
       },
       setCategories(state, value) {
         state.categories = value
