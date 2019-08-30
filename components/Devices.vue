@@ -79,7 +79,8 @@ export default {
     }
   },
   mounted() {
-    this.devices = this.$store.state.devices.available
+    this.$store.dispatch('getFeaturesDevices') // FIXME I don't know why!!!
+    this.devices = this.$store.getters.getAvailableDevices
   }
 }
 </script>
