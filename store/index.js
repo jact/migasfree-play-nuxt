@@ -48,7 +48,8 @@ const createStore = () => {
         categories: '/catalog/apps/categories/',
         computer: '/computers/',
         availableDevices: '/devices/devices/available/?cid=',
-        logicalDevice: '/devices/logical/available/?cid='
+        logicalDevice: '/devices/logical/available/?cid=',
+        cidAttribute: '/attributes/?property_att__prefix=CID&value='
       },
       internalApi: 'http://localhost:3000',
       initialUrl: {
@@ -66,7 +67,8 @@ const createStore = () => {
         mask: '',
         network: '',
         helpdesk: '',
-        data: {}
+        data: {},
+        attribute: 0
       },
       serverVersion: '',
       packages: {
@@ -137,6 +139,7 @@ const createStore = () => {
         })
 
         await vuexContext.dispatch('computerData')
+        await vuexContext.dispatch('computerAttribute')
         await vuexContext.dispatch('setInstalledPackages')
         await vuexContext.dispatch('setCategories')
         await vuexContext.dispatch('getExecutions')
@@ -155,10 +158,11 @@ const createStore = () => {
         // await vuexContext.dispatch('getFeaturesDevices') // why is not working in Device component?
       },
       async readPreferences(vuexContext) {
-        let response = await this.$axios.$get(
-          `${vuexContext.state.internalApi}/preferences`
-        )
-        vuexContext.commit('setPreferences', response)
+        await this.$axios
+          .$get(`${vuexContext.state.internalApi}/preferences`)
+          .then(data => {
+            vuexContext.commit('setPreferences', data)
+          })
       },
       savePreferences(vuexContext) {
         this.$axios.$post(`${vuexContext.state.internalApi}/preferences`, {
@@ -173,50 +177,76 @@ const createStore = () => {
         })
       },
       async computerInfo(vuexContext) {
-        let response = await this.$axios.$get(
-          `${vuexContext.state.internalApi}/preferences/server`
-        )
-        vuexContext.commit('setComputerInfo', response)
+        await this.$axios
+          .$get(`${vuexContext.state.internalApi}/preferences/server`)
+          .then(data => {
+            vuexContext.commit('setComputerInfo', data)
+          })
       },
       async computerNetwork(vuexContext) {
-        let response = await this.$axios.$get(
-          `${vuexContext.state.internalApi}/computer/network`
-        )
-        vuexContext.commit('setComputerNetwork', response)
+        await this.$axios
+          .$get(`${vuexContext.state.internalApi}/computer/network`)
+          .then(data => {
+            vuexContext.commit('setComputerNetwork', data)
+          })
       },
       async moreComputerInfo(vuexContext) {
-        let response = await this.$axios.$get(
-          `${vuexContext.state.initialUrl.baseDomain}${vuexContext.state.publicApi.computerInfo}${vuexContext.state.computer.uuid}`
-        )
-        vuexContext.commit('setMoreComputerInfo', response)
+        await this.$axios
+          .$get(
+            `${vuexContext.state.initialUrl.baseDomain}${vuexContext.state.publicApi.computerInfo}${vuexContext.state.computer.uuid}`
+          )
+          .then(data => {
+            vuexContext.commit('setMoreComputerInfo', data)
+          })
       },
       async computerData(vuexContext) {
-        let response = await this.$axios
+        await this.$axios
           .$get(
             `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.computer}${vuexContext.state.computer.cid}/`,
             { headers: { Authorization: vuexContext.state.tokenAuth.value } }
           )
+          .then(data => {
+            vuexContext.commit('setComputerData', data)
+          })
           .catch(error => {
             console.log(error) // TODO
           })
-        vuexContext.commit('setComputerData', response)
+      },
+      async computerAttribute(vuexContext) {
+        await this.$axios
+          .$get(
+            `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.cidAttribute}${vuexContext.state.computer.cid}`,
+            { headers: { Authorization: vuexContext.state.tokenAuth.value } }
+          )
+          .then(data => {
+            if (data.count === 1)
+              vuexContext.commit('setComputerAttribute', data.results[0].id)
+          })
+          .catch(error => {
+            console.log(error) // TODO
+          })
       },
       async computerDevices(vuexContext) {
-        let response = await this.$axios
+        await this.$axios
           .$get(
             `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.computer}${vuexContext.state.computer.cid}/devices/`,
             { headers: { Authorization: vuexContext.state.tokenAuth.value } }
           )
+          .then(data => {
+            vuexContext.commit('setComputerDevices', data)
+          })
           .catch(error => {
             console.log(error) // TODO
           })
-        vuexContext.commit('setComputerDevices', response)
       },
       async serverInfo(vuexContext) {
-        let response = await this.$axios.$post(
-          `${vuexContext.state.initialUrl.public}${vuexContext.state.publicApi.serverInfo}`
-        )
-        vuexContext.commit('setServerVersion', response.version)
+        await this.$axios
+          .$post(
+            `${vuexContext.state.initialUrl.public}${vuexContext.state.publicApi.serverInfo}`
+          )
+          .then(data => {
+            vuexContext.commit('setServerVersion', data.version)
+          })
       },
       async getToken(vuexContext) {
         let response = await this.$axios.$get(
@@ -241,17 +271,21 @@ const createStore = () => {
         vuexContext.commit('setToken', response.token)
       },
       async setAvailablePackages(vuexContext) {
-        let response = await this.$axios.$get(
-          `${vuexContext.state.internalApi}/packages/available`
-        )
-        vuexContext.commit('setAvailablePackages', response)
+        await this.$axios
+          .$get(`${vuexContext.state.internalApi}/packages/available`)
+          .then(data => {
+            vuexContext.commit('setAvailablePackages', data)
+          })
       },
       async setInstalledPackages(vuexContext) {
-        let response = await this.$axios.$post(
-          `${vuexContext.state.internalApi}/packages/installed`,
-          vuexContext.getters.getAppsPackages
-        )
-        vuexContext.commit('setInstalledPackages', response)
+        await this.$axios
+          .$post(
+            `${vuexContext.state.internalApi}/packages/installed`,
+            vuexContext.getters.getAppsPackages
+          )
+          .then(data => {
+            vuexContext.commit('setInstalledPackages', data)
+          })
       },
       async getAllResults(
         vuexContext,
@@ -281,17 +315,21 @@ const createStore = () => {
           })
       },
       async setCategories(vuexContext) {
-        let response = await this.$axios.$get(
-          `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.categories}`,
-          { headers: { Authorization: vuexContext.state.tokenAuth.value } }
-        )
-        vuexContext.commit('setCategories', response)
+        await this.$axios
+          .$get(
+            `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.categories}`,
+            { headers: { Authorization: vuexContext.state.tokenAuth.value } }
+          )
+          .then(data => {
+            vuexContext.commit('setCategories', data)
+          })
       },
       async getExecutions(vuexContext) {
-        let response = await this.$axios.$get(
-          `${vuexContext.state.internalApi}/executions`
-        )
-        vuexContext.commit('setExecutionsLog', response)
+        await this.$axios
+          .$get(`${vuexContext.state.internalApi}/executions`)
+          .then(data => {
+            vuexContext.commit('setExecutionsLog', data)
+          })
       },
       async setExecutions(vuexContext) {
         await this.$axios.$post(
@@ -305,21 +343,22 @@ const createStore = () => {
         })
       },
       async getLogicalDevice(vuexContext, { id, index }) {
-        let response = await this.$axios
+        await this.$axios
           .$get(
             `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.logicalDevice}${vuexContext.state.computer.cid}&did=${id}`,
             { headers: { Authorization: vuexContext.state.tokenAuth.value } }
           )
+          .then(data => {
+            if (data.results) {
+              let payload = {}
+              payload.results = data.results
+              payload.index = index
+              vuexContext.commit('addLogicalDevices', payload)
+            }
+          })
           .catch(error => {
             console.log(error) // TODO
           })
-
-        if (response.results) {
-          let payload = {}
-          payload.results = response.results
-          payload.index = index
-          vuexContext.commit('addLogicalDevices', payload)
-        }
       },
       run(vuexContext, { cmd, text, element = null }) {
         if (vuexContext.state.executions.isRunningCommand) {
@@ -457,6 +496,9 @@ const createStore = () => {
       },
       setComputerData(state, value) {
         state.computer.data = value
+      },
+      setComputerAttribute(state, value) {
+        state.computer.attribute = value
       },
       setComputerNetwork(state, value) {
         state.computer.mask = value.mask
