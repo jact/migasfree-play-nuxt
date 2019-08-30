@@ -152,7 +152,7 @@ const createStore = () => {
             reject
           })
         })
-        await vuexContext.dispatch('getFeaturesDevices')
+        // await vuexContext.dispatch('getFeaturesDevices') // why is not working in Device component?
       },
       async readPreferences(vuexContext) {
         let response = await this.$axios.$get(
@@ -486,8 +486,7 @@ const createStore = () => {
         state.devices.available = value
       },
       addLogicalDevices(state, value) {
-        state.devices.available[value.index].logical = value.results
-        console.log(state.devices.available[value.index])
+        Vue.set(state.devices.available[value.index], 'logical', value.results)
       },
       setCategories(state, value) {
         state.categories = value
