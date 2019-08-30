@@ -7,9 +7,20 @@
       <div class="description">{{ description }}</div>
     </div>
     <div class="extra content" v-if="logical">
-      <p v-for="item in logical" :key="item.id">
+      <p v-for="item in logical" :key="item.id" v-if="isVisible(item.id)">
         <span class="feature">{{ featureName(item) }}</span>
+        <template v-if="isAssigned(item.id)">
+          <span class="ui blue basic tag label">Asignado</span>
+          <button
+            class="ui icon negative button right floated"
+            data-tooltip="Desinstalar"
+            data-position="bottom center"
+          >
+            <i class="trash alternate icon" />
+          </button>
+        </template>
         <button
+          v-else
           class="ui icon positive button right floated"
           data-tooltip="Instalar"
           data-position="bottom center"
@@ -17,16 +28,6 @@
           <i class="download icon" />
         </button>
       </p>
-      <!--p>
-        <span class="feature">Color</span>
-        <button
-          class="ui icon negative button right floated"
-          data-tooltip="Desinstalar"
-          data-position="bottom center"
-        >
-          <i class="trash alternate icon" />
-        </button>
-      </p-->
     </div>
   </div>
 </template>
@@ -65,6 +66,20 @@ export default {
     featureName(item) {
       if (item.alternative_feature_name) return item.alternative_feature_name
       else return item.feature.name
+    },
+    isAssigned(id) {
+      return (
+        this.$store.state.devices.assigned.find(item => {
+          return item.id === id
+        }) ||
+        this.$store.state.devices.inflicted.find(item => {
+          return item.id === id
+        })
+      )
+    },
+    isVisible(id) {
+      if (!this.$store.state.filters.onlyAssignedDevices) return true
+      else return this.isAssigned(id)
     }
   }
 }
