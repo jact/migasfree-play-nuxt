@@ -565,6 +565,17 @@ const createStore = () => {
           }
         }
       },
+      addAssignedDevice(state, value) {
+        Vue.set(state.devices.assigned, state.devices.assigned.length, value)
+      },
+      removeAssignedDevice(state, value) {
+        for (let i = 0; i < state.devices.assigned.length; i++) {
+          if (state.devices.assigned[i].id === value) {
+            state.devices.assigned.splice(i, 1)
+            return
+          }
+        }
+      },
       setCategories(state, value) {
         state.categories = value
         state.categories[0] = 'All'
