@@ -15,7 +15,7 @@
             class="ui icon negative button right floated"
             data-tooltip="Desinstalar"
             data-position="bottom center"
-            @click="removeDevice(item)"
+            @click="removeDevice($event, item)"
           >
             <i class="trash alternate icon" />
           </button>
@@ -25,7 +25,7 @@
           class="ui icon positive button right floated"
           data-tooltip="Instalar"
           data-position="bottom center"
-          @click="installDevice(item)"
+          @click="installDevice($event, item)"
         >
           <i class="download icon" />
         </button>
@@ -86,25 +86,40 @@ export default {
         })
       )
     },
-    installDevice(item) {
+    installDevice(event, item) {
       let attributes = item.attributes
+      event.srcElement.parentElement.disabled = true
+
       if (!attributes.includes(this.$store.state.computer.attribute)) {
         attributes.push(this.$store.state.computer.attribute)
       }
       this.$store.dispatch('changeDeviceAttributes', {
         id: item.id,
-        attributes
+        attributes,
+        element: event.srcElement.parentElement
       })
     },
-    removeDevice(item) {
+    removeDevice(event, item) {
       let attributes = item.attributes
+
+      event.srcElement.parentElement.disabled = true
       attributes = attributes.filter(x => {
         return x !== this.$store.state.computer.attribute
       })
       this.$store.dispatch('changeDeviceAttributes', {
         id: item.id,
-        attributes
+        attributes,
+        element: event.srcElement.parentElement
       })
+    }
+  },
+  watch: {
+    logical: {
+      deep: true,
+      handler(value) {
+        console.log('The list of logical devices has changed!', value)
+        // this.visibleLogicalDevices
+      }
     }
   }
 }
