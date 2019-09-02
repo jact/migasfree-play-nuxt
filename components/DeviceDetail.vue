@@ -7,7 +7,7 @@
       <div class="description">{{ description }}</div>
     </div>
     <div class="extra content" v-if="logical">
-      <p v-for="item in logical" :key="item.id" v-if="isVisible(item.id)">
+      <p v-for="item in visibleLogicalDevices" :key="item.id">
         <span class="feature">{{ featureName(item) }}</span>
         <template v-if="isAssigned(item.id)">
           <span class="ui blue basic tag label">Asignado</span>
@@ -62,6 +62,13 @@ export default {
     tooltip() {
       if (this.ip) return `${this.connection} (${this.ip})`
       else return this.connection
+    },
+    visibleLogicalDevices() {
+      if (!this.$store.state.filters.onlyAssignedDevices) return this.logical
+      else
+        return this.logical.filter(item => {
+          return this.isAssigned(item.id)
+        })
     }
   },
   methods: {
@@ -78,10 +85,6 @@ export default {
           return item.id === id
         })
       )
-    },
-    isVisible(id) {
-      if (!this.$store.state.filters.onlyAssignedDevices) return true
-      else return this.isAssigned(id)
     },
     installDevice(item) {
       let attributes = item.attributes
