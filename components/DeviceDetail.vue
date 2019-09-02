@@ -73,8 +73,7 @@ export default {
   },
   methods: {
     featureName(item) {
-      if (item.alternative_feature_name) return item.alternative_feature_name
-      else return item.feature.name
+      return item.alternative_feature_name || item.feature.name
     },
     isAssigned(id) {
       return (
@@ -98,6 +97,11 @@ export default {
         attributes,
         element: event.srcElement.parentElement
       })
+      this.$store.commit('addAssignedDevice', {
+        id: item.id,
+        device: item.device,
+        feature: item.feature
+      })
     },
     removeDevice(event, item) {
       let attributes = item.attributes
@@ -111,15 +115,7 @@ export default {
         attributes,
         element: event.srcElement.parentElement
       })
-    }
-  },
-  watch: {
-    logical: {
-      deep: true,
-      handler(value) {
-        console.log('The list of logical devices has changed!', value)
-        // this.visibleLogicalDevices
-      }
+      this.$store.commit('removeAssignedDevice', item.id)
     }
   }
 }
