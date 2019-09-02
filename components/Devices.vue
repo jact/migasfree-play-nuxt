@@ -48,13 +48,13 @@ export default {
         )
 
       if (this.$store.state.filters.onlyAssignedDevices)
-        results = results.filter(
-          device =>
+        results = results.filter(device => {
+          return (
             this.$store.state.devices.assigned.filter(x => {
-              console.log(x, x.device.id, device.id)
-              x.device.id === device.id
-            }).length === 0
-        ) // FIXME
+              return x.device.id === device.id
+            }).length !== 0
+          )
+        })
 
       return results
     }
