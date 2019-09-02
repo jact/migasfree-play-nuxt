@@ -1,7 +1,7 @@
 <template>
   <div>
     <DeviceFilter />
-    <div class="ui stackable cards">
+    <div class="ui two stackable cards">
       <DeviceDetail
         v-for="item in devicesByFilter"
         :key="item.id"
