@@ -361,7 +361,7 @@ const createStore = () => {
             console.log(error) // TODO
           })
       },
-      changeDeviceAttributes(vuexContext, { id, attributes }) {
+      changeDeviceAttributes(vuexContext, { id, attributes, element = null }) {
         this.$axios
           .$patch(
             `${vuexContext.state.initialUrl.token}${vuexContext.state.tokenApi.logicalDevice}${id}/`,
@@ -369,11 +369,12 @@ const createStore = () => {
             { headers: { Authorization: vuexContext.state.tokenAuth.value } }
           )
           .then(data => {
-            if (data.results) {
+            if (data.id) {
               let payload = {}
               payload.results = data.attributes
-              payload.index = id // FIXME real index
+              payload.index = id
               vuexContext.commit('setLogicalAttributes', payload)
+              if (element) element.disabled = false
             }
           })
           .catch(error => {
@@ -551,11 +552,18 @@ const createStore = () => {
         Vue.set(state.devices.available[value.index], 'logical', value.results)
       },
       setLogicalAttributes(state, value) {
-        Vue.set(
-          state.devices.available[value.index].logical,
-          'attributes',
-          value.results
-        )
+        for (let i = 0; i < state.devices.available.length; i++) {
+          for (let j = 0; j < state.devices.available[i].logical.length; j++) {
+            if (state.devices.available[i].logical[j].id === value.index) {
+              Vue.set(
+                state.devices.available[i].logical[j],
+                'attributes',
+                value.results
+              )
+              return
+            }
+          }
+        }
       },
       setCategories(state, value) {
         state.categories = value
