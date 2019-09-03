@@ -59,6 +59,9 @@ export default {
         element: event.srcElement.parentElement
       })
     }
+  },
+  head: {
+    titleTemplate: '%s - Migasfree Play'
   }
 }
 </script>
