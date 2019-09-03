@@ -211,6 +211,10 @@ const createStore = () => {
           })
           .catch(error => {
             console.log(error) // TODO
+            /*error({
+              statusCode: 503,
+              message: 'Unable to fetch computer at this time, please try again'
+            })*/ // TODO
           })
       },
       async computerAttribute(vuexContext) {
