@@ -36,9 +36,9 @@ export default {
     appsByFilter() {
       let results = this.apps
 
-      if (this.$store.state.selectedCategory > 0)
+      if (this.$store.state.filters.selectedCategory > 0)
         results = results.filter(
-          app => app.category.id == this.$store.state.selectedCategory
+          app => app.category.id == this.$store.state.filters.selectedCategory
         )
       if (this.$store.state.filters.searchApp)
         results = results.filter(
