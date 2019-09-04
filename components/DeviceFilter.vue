@@ -47,10 +47,13 @@ export default {
   },
   methods: {
     setSearchDevice() {
-      this.$store.commit('setSearchDevice', this.searchDevice)
+      this.$store.commit('filters/setSearchDevice', this.searchDevice)
     },
     setOnlyAssignedDevices() {
-      this.$store.commit('setOnlyAssignedDevices', this.onlyAssignedDevices)
+      this.$store.commit(
+        'filters/setOnlyAssignedDevices',
+        this.onlyAssignedDevices
+      )
     }
   }
 }
