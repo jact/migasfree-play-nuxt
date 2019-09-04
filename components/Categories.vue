@@ -55,32 +55,33 @@ export default {
   name: 'Categories',
   data() {
     return {
-      category: this.$store.state.selectedCategory || 'All',
+      category: '',
       searchApp: '',
       onlyInstalledApps: false
     }
   },
   mounted() {
+    this.category = this.$store.state.filters.selectedCategory || 'All'
     this.searchApp = this.$store.state.filters.searchApp
     this.onlyInstalledApps = this.$store.state.filters.onlyInstalledApps
   },
   computed: {
     selectedCategory() {
-      return this.$store.state.selectedCategory
+      return this.$store.state.filters.selectedCategory
     },
     categories() {
-      return this.$store.state.categories
+      return this.$store.state.filters.categories
     }
   },
   methods: {
     setCategory() {
-      this.$store.commit('setSelectedCategory', this.category)
+      this.$store.commit('filters/setSelectedCategory', this.category)
     },
     setSearchApp() {
-      this.$store.commit('setSearchApp', this.searchApp)
+      this.$store.commit('filters/setSearchApp', this.searchApp)
     },
     setOnlyInstalledApps() {
-      this.$store.commit('setOnlyInstalledApps', this.onlyInstalledApps)
+      this.$store.commit('filters/setOnlyInstalledApps', this.onlyInstalledApps)
     }
   }
 }
