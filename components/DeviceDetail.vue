@@ -86,18 +86,18 @@ export default {
       )
     },
     installDevice(event, item) {
-      let attributes = item.attributes
+      let attributes = item.attributes.slice() // copy value (not reference)
       event.srcElement.parentElement.disabled = true
 
       if (!attributes.includes(this.$store.state.computer.attribute)) {
         attributes.push(this.$store.state.computer.attribute)
       }
-      this.$store.dispatch('changeDeviceAttributes', {
+      this.$store.dispatch('devices/changeDeviceAttributes', {
         id: item.id,
         attributes,
         element: event.srcElement.parentElement
       })
-      this.$store.commit('addAssignedDevice', {
+      this.$store.commit('devices/addAssignedDevice', {
         id: item.id,
         device: item.device,
         feature: item.feature
@@ -110,12 +110,12 @@ export default {
       attributes = attributes.filter(x => {
         return x !== this.$store.state.computer.attribute
       })
-      this.$store.dispatch('changeDeviceAttributes', {
+      this.$store.dispatch('devices/changeDeviceAttributes', {
         id: item.id,
         attributes,
         element: event.srcElement.parentElement
       })
-      this.$store.commit('removeAssignedDevice', item.id)
+      this.$store.commit('devices/removeAssignedDevice', item.id)
     }
   }
 }
