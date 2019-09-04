@@ -39,13 +39,13 @@ export default {
   },
   methods: {
     setLanguage() {
-      this.$store.commit('setLanguage', this.language)
-      this.$store.dispatch('savePreferences')
+      this.$store.commit('preferences/setLanguage', this.language)
+      this.$store.dispatch('preferences/savePreferences')
     },
     setShowSyncDetails(value) {
-      this.$store.commit('setShowSyncDetails', value)
+      this.$store.commit('preferences/setShowSyncDetails', value)
       this.showSyncDetails = this.$store.state.preferences.showSyncDetails
-      this.$store.dispatch('savePreferences')
+      this.$store.dispatch('preferences/savePreferences')
     }
   }
 }
