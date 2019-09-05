@@ -27,14 +27,9 @@ export default {
     AppDetail,
     Categories
   },
-  data() {
-    return {
-      apps: []
-    }
-  },
   computed: {
     appsByFilter() {
-      let results = this.apps
+      let results = this.$store.state.apps
 
       if (this.$store.state.filters.selectedCategory > 0)
         results = results.filter(
@@ -61,9 +56,6 @@ export default {
 
       return results
     }
-  },
-  mounted() {
-    this.apps = this.$store.state.apps
   }
 }
 </script>
