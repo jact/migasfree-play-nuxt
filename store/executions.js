@@ -45,7 +45,7 @@ const actions = {
       this.$toast.info('please wait, other process is running!!!')
       return
     }
-    this.commit('startedCmd')
+    this.commit('executions/startedCmd')
 
     const os = require('os')
     const spawn = require('child_process').spawn
@@ -57,16 +57,19 @@ const actions = {
       process = spawn('cmd', ['/C', cmd])
     }
 
-    this.commit('addExecution', text)
+    this.commit('executions/addExecution', text)
 
     process.stdout.on('data', data => {
-      this.commit('appendExecutionText', replaceColors(data.toString()))
+      this.commit(
+        'executions/appendExecutionText',
+        replaceColors(data.toString())
+      )
     })
 
     process.stderr.on('data', data => {
-      this.commit('appendExecutionError', data.toString())
+      this.commit('executions/appendExecutionError', data.toString())
       this.commit(
-        'appendExecutionText',
+        'executions/appendExecutionText',
         "<span class='ui negative text'>" + data.toString() + '</span>'
       )
     })
@@ -83,7 +86,9 @@ const actions = {
         win.show()
       } else {
         if (vuexContext.state.error === '') {
-          vuexContext.dispatch('setInstalledPackages')
+          vuexContext.dispatch('packages/setInstalledPackages', null, {
+            root: true
+          })
 
           /*if (id == 'sync' && document.hidden) { // FAB
             // sync ok & minimized -> exit
@@ -91,16 +96,20 @@ const actions = {
           }*/ // FIXME
         } else {
           this.$toast.error(replaceColors(vuexContext.state.error))
-          vuexContext.state.error = ''
+          vuexContext.commit('executions/resetExecutionError', null, {
+            root: true
+          })
         }
       }
 
       if (cmd.includes('sync')) {
-        vuexContext.dispatch('setAvailablePackages')
+        vuexContext.dispatch('packages/setAvailablePackages', null, {
+          root: true
+        })
       }
 
-      this.dispatch('setExecutions')
-      this.commit('finishedCmd')
+      this.dispatch('executions/setExecutions')
+      this.commit('executions/finishedCmd')
     })
   }
 }
@@ -131,6 +140,9 @@ const mutations = {
   },
   appendExecutionError(state, text) {
     state.error += text
+  },
+  resetExecutionError(state) {
+    state.error = ''
   }
 }
 
