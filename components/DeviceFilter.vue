@@ -5,7 +5,7 @@
         <el-form ref="form" @submit.prevent>
           <div class="field">
             <el-input
-              placeholder="buscar"
+              :placeholder="$t('devices.filter.search')"
               v-model="searchDevice"
               @input="setSearchDevice"
               clearable
@@ -15,8 +15,8 @@
           <div class="inline field">
             <el-switch
               v-model="onlyAssignedDevices"
-              active-text="Dispositivos asignados"
-              inactive-text="Todos los disponibles"
+              :active-text="$t('devices.filter.assigned')"
+              :inactive-text="$t('devices.filter.all')"
               @change="setOnlyAssignedDevices"
             />
           </div>
