@@ -6,10 +6,10 @@
           <div class="field">
             <el-select
               v-model="category"
-              placeholder="Categoría"
+              :placeholder="$t('apps.filter.category')"
               @change="setCategory"
               size="large"
-              data-tooltip="Categoría"
+              :data-tooltip="$t('apps.filter.category')"
               data-position="bottom center"
             >
               <el-option
@@ -23,7 +23,7 @@
           </div>
           <div class="field">
             <el-input
-              placeholder="buscar"
+              :placeholder="$t('apps.filter.search')"
               v-model="searchApp"
               @input="setSearchApp"
               clearable
@@ -33,8 +33,8 @@
           <div class="inline field">
             <el-switch
               v-model="onlyInstalledApps"
-              active-text="Aplicaciones instaladas"
-              inactive-text="Todas las aplicaciones"
+              :active-text="$t('apps.filter.installed')"
+              :inactive-text="$t('apps.filter.all')"
               @change="setOnlyInstalledApps"
             />
           </div>
