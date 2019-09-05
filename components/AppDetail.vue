@@ -146,7 +146,7 @@ export default {
         cmd = 'migasfree install ' + packagesToInstall
       }
 
-      this.$store.dispatch('run', {
+      this.$store.dispatch('executions/run', {
         cmd,
         text: `Install ${name}`,
         element: event.srcElement.parentElement
@@ -165,7 +165,7 @@ export default {
         cmd = 'migasfree purge ' + packagesToRemove
       }
 
-      this.$store.dispatch('run', {
+      this.$store.dispatch('executions/run', {
         cmd,
         text: `Remove ${name}`,
         element: event.srcElement.parentElement
