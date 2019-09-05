@@ -40,7 +40,8 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/markdownit',
     'nuxt-element-ui',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
+    'nuxt-i18n'
   ],
   /*
    ** Axios module configuration
@@ -53,6 +54,24 @@ module.exports = {
   toast: {
     position: 'bottom-left',
     duration: 3000
+  },
+  i18n: {
+    locales: [
+      {
+        code: 'en',
+        name: 'English',
+        file: 'en-US.js'
+      },
+      {
+        code: 'es',
+        name: 'Español',
+        file: 'es-ES.js'
+      }
+    ],
+    defaultLocale: 'es',
+    // fallbackLocale: 'en',
+    lazy: true,
+    langDir: 'i18n/'
   },
   /*
    ** Build configuration
