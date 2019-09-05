@@ -10,10 +10,10 @@
       <p v-for="item in visibleLogicalDevices" :key="item.id">
         <span class="feature">{{ featureName(item) }}</span>
         <template v-if="isAssigned(item.id)">
-          <span class="ui blue basic tag label">Asignado</span>
+          <span class="ui blue basic tag label">{{ $t('actions.assigned') }}</span>
           <button
             class="ui icon negative button right floated"
-            data-tooltip="Desinstalar"
+            :data-tooltip="$t('actions.uninstall')"
             data-position="bottom center"
             @click="removeDevice($event, item)"
           >
@@ -23,7 +23,7 @@
         <button
           v-else
           class="ui icon positive button right floated"
-          data-tooltip="Instalar"
+          :data-tooltip="$t('actions.install')"
           data-position="bottom center"
           @click="installDevice($event, item)"
         >
