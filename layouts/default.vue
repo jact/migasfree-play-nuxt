@@ -53,7 +53,7 @@ export default {
       if (this.$store.state.preferences.showSyncDetails)
         this.$router.push('/details')
 
-      this.$store.dispatch('run', {
+      this.$store.dispatch('executions/run', {
         cmd: 'migasfree sync',
         text: 'Synchronization',
         element: event.srcElement.parentElement
