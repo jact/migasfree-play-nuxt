@@ -7,11 +7,38 @@ export default {
     info: 'Información',
     help: 'Ayuda'
   },
+  apps: {
+    install: 'Instalar {name}',
+    uninstall: 'Desinstalar {name}',
+    filter: {
+      category: 'Categoría',
+      search: 'buscar',
+      all: 'Todas las aplicaciones',
+      installed: 'Aplicaciones instaladas'
+    }
+  },
+  actions: {
+    install: 'Instalar',
+    uninstall: 'Desinstalar',
+    assigned: 'Asignado',
+    privileged: 'Instalar con privilegios',
+    locked: 'Bloqueado',
+    installed: 'Instalado',
+    installing: 'Instalando {name}...',
+    uninstalling: 'Desinstalando {name}...'
+  },
   login: {
     title: 'Usuario con privilegios en el ordenador',
     username: 'Nombre de usuario',
     password: 'Contraseña',
     action: 'Iniciar sesión'
+  },
+  devices: {
+    filter: {
+      search: 'buscar',
+      all: 'Todos los disponibles',
+      assigned: 'Dispositivos asignados'
+    }
   },
   preferences: {
     showSyncDetails: 'Mostrar detalles al sincronizar'
