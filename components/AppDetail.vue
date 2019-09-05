@@ -20,7 +20,7 @@
         <button
           v-if="isInstallable"
           class="ui icon positive button"
-          data-tooltip="Instalar"
+          :data-tooltip="$t('actions.install')"
           data-position="bottom center"
           @click="installApp($event, name, packages)"
         >
@@ -29,7 +29,7 @@
         <button
           v-if="isRemovable"
           class="ui icon negative button"
-          data-tooltip="Desinstalar"
+          :data-tooltip="$t('actions.uninstall')"
           data-position="bottom center"
           @click="removeApp($event, name, packages)"
         >
@@ -38,7 +38,7 @@
         <button
           v-if="isPrivileged"
           class="ui icon orange button"
-          data-tooltip="Instalar con privilegios"
+          :data-tooltip="$t('actions.privileged')"
           data-position="bottom center"
           @click="modalLogin"
         >
@@ -47,12 +47,12 @@
         <button
           v-if="!isAvailable"
           class="ui icon brown button"
-          data-tooltip="Bloqueado"
+          :data-tooltip="$t('actions.locked')"
           data-position="bottom center"
         >
           <i class="lock icon" />
         </button>
-        <span v-if="isInstalled" class="ui blue basic tag label">Instalado</span>
+        <span v-if="isInstalled" class="ui blue basic tag label">{{ $t('actions.installed') }}</span>
       </div>
     </div>
   </div>
@@ -138,7 +138,7 @@ export default {
       let cmd
 
       event.srcElement.parentElement.disabled = true
-      this.$toast.info(`Installing ${name}...`)
+      this.$toast.info(this.$t('actions.installing', {name}))
 
       if (os.type() === 'Linux') {
         cmd = 'LANG_ALL=C echo "y" | migasfree install ' + packagesToInstall
@@ -148,7 +148,7 @@ export default {
 
       this.$store.dispatch('executions/run', {
         cmd,
-        text: `Install ${name}`,
+        text: this.$t('apps.install', {name}),
         element: event.srcElement.parentElement
       })
     },
@@ -157,7 +157,7 @@ export default {
       let cmd
 
       event.srcElement.parentElement.disabled = true
-      this.$toast.info(`Removing ${name}...`)
+      this.$toast.info(this.$t('actions.uninstalling', {name}))
 
       if (os.type() === 'Linux') {
         cmd = 'LANG_ALL=C echo "y" | migasfree purge ' + packagesToRemove
@@ -167,7 +167,7 @@ export default {
 
       this.$store.dispatch('executions/run', {
         cmd,
-        text: `Remove ${name}`,
+        text: this.$t('apps.uninstall', {name}),
         element: event.srcElement.parentElement
       })
     },
