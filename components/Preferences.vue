@@ -5,7 +5,7 @@
         <div class="field">
           <select @change="setLanguage" v-model="language">
             <option
-              v-for="item in languages"
+              v-for="item in availableLocales"
               :key="item.code"
               :value="item.code"
               :selected="item.code === $store.state.preferences.language"
@@ -15,7 +15,7 @@
         <div class="inline field">
           <el-switch
             v-model="showSyncDetails"
-            active-text="Mostrar detalles al sincronizar"
+            :active-text="$t('preferences.showSyncDetails')"
             @change="setShowSyncDetails"
           />
         </div>
@@ -30,17 +30,19 @@ export default {
   data() {
     return {
       language: this.$store.state.preferences.language,
-      languages: [
-        { code: 'es', name: 'Español' },
-        { code: 'en', name: 'English' }
-      ],
       showSyncDetails: this.$store.state.preferences.showSyncDetails
+    }
+  },
+  computed: {
+    availableLocales() {
+      return this.$i18n.locales
     }
   },
   methods: {
     setLanguage() {
       this.$store.commit('preferences/setLanguage', this.language)
       this.$store.dispatch('preferences/savePreferences')
+      this.switchLocalePath(this.language)
     },
     setShowSyncDetails(value) {
       this.$store.commit('preferences/setShowSyncDetails', value)
