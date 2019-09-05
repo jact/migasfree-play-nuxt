@@ -17,8 +17,8 @@
             <i class="user icon" />
             {{ $store.state.computer.user }}
           </div>
-          <div class="description" data-tooltip="Última sincronización">
-            <i class="calendar check outline icon"></i>
+          <div class="description" :data-tooltip="$t('info.lastSync')">
+            <i class="calendar check outline icon" />
             {{ syncEndDate }}
           </div>
         </div>
@@ -30,7 +30,7 @@
             <i :class="computerIcon" />
             {{ $store.state.computer.data.product }}
           </div>
-          <div class="description" data-tooltip="Hardware">
+          <div class="description" :data-tooltip="$t('info.hardware')">
             <p>
               <i class="microchip icon" />
               {{ $store.state.computer.data.cpu }}
@@ -53,10 +53,12 @@
             <i class="info circle icon" />
             {{ $store.state.computer.data.fqdn }}
           </div>
-          <div class="description" data-tooltip="Datos de red">
+          <div class="description" :data-tooltip="$t('info.networkData')">
             <p>
               <i class="at icon" />
-              {{ $store.state.computer.data.ip_address }} / {{ $store.state.computer.mask }} ({{ $store.state.computer.network }})
+              {{ $store.state.computer.data.ip_address }}
+              / {{ $store.state.computer.mask }}
+              ({{ $store.state.computer.network }})
             </p>
             <p>
               <i class="exchange alternate rotated icon" />
@@ -72,7 +74,7 @@
             <i class="server icon" />
             {{ $store.state.host }}
           </div>
-          <div class="description" data-tooltip="Datos de migasfree">
+          <div class="description" :data-tooltip="$t('info.migasfreeData')">
             <p>
               <i class="sitemap icon" />
               {{ $store.state.computer.project }}
@@ -109,7 +111,7 @@
             <div class="extra">
               <button
                 class="ui icon positive button right floated"
-                data-tooltip="Imprimir"
+                :data-tooltip="$t('info.print')"
                 data-position="top center"
                 @click="printLabel"
               >
@@ -192,7 +194,9 @@ export default {
         this.bytesToGigas(this.$store.state.computer.data.storage) +
         ' GB (' +
         this.$store.state.computer.data.disks +
-        ' Disks)'
+        ' ' +
+        this.$t('info.disks') +
+        ')'
       )
     },
     computerMac() {
