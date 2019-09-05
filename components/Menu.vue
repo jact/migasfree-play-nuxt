@@ -8,7 +8,7 @@
         v-if="$store.state.preferences.showApps"
         to="/apps"
         class="item"
-        data-tooltip="Apps"
+        :data-tooltip="$t('menu.apps')"
         data-position="bottom center"
       >
         <i class="large th icon" />
@@ -17,7 +17,7 @@
         v-if="$store.state.preferences.showDevices"
         to="/devices"
         class="item"
-        data-tooltip="Devices"
+        :data-tooltip="$t('menu.devices')"
         data-position="bottom center"
       >
         <i class="large print icon" />
@@ -26,7 +26,7 @@
         v-if="$store.state.preferences.showDetails"
         to="/details"
         class="item"
-        data-tooltip="Details"
+        :data-tooltip="$t('menu.details')"
         data-position="bottom center"
       >
         <i class="large tasks icon" />
@@ -34,7 +34,7 @@
       <router-link
         to="/preferences"
         class="item"
-        data-tooltip="Preferences"
+        :data-tooltip="$t('menu.preferences')"
         data-position="bottom center"
       >
         <i class="large cog icon" />
@@ -43,7 +43,7 @@
         v-if="$store.state.preferences.showInfo"
         to="/info"
         class="item"
-        data-tooltip="Info"
+        :data-tooltip="$t('menu.info')"
         data-position="bottom center"
       >
         <i class="large info circle icon" />
@@ -51,7 +51,7 @@
       <a
         v-if="$store.state.preferences.showHelp"
         class="item"
-        data-tooltip="Help"
+        :data-tooltip="$t('menu.help')"
         data-position="bottom center"
         href="https://fun-with-migasfree.readthedocs.io/es/master/chapter10.html#migasfree-play"
       >
