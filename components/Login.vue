@@ -1,25 +1,30 @@
 <template>
-  <modal name="login" :width="300" :height="220" @opened="toggleModal" @closed="toggleModal">
+  <modal name="login" :width="380" :height="220" @opened="toggleModal" @closed="toggleModal">
     <center>
       <form class="ui form" @submit.prevent="login">
-        <legend>Privileged computer user</legend>
+        <legend>{{ $t('login.title') }}</legend>
         <div class="required field ui left icon input">
-          <i class="user icon"></i>
+          <i class="user icon" />
           <input
             type="text"
             v-model="username"
-            placeholder="Username"
+            :placeholder="$t('login.username')"
             autocomplete="off"
             ref="username"
             autofocus
           />
         </div>
         <div class="required field ui left icon input">
-          <i class="lock icon"></i>
-          <input type="password" v-model="password" placeholder="Password" autocomplete="off" />
+          <i class="lock icon" />
+          <input
+            type="password"
+            v-model="password"
+            :placeholder="$t('login.password')"
+            autocomplete="off"
+          />
         </div>
         <div>
-          <button class="large ui positive button" type="submit">Login</button>
+          <button class="large ui positive button" type="submit">{{ $t('login.action') }}</button>
         </div>
       </form>
     </center>
