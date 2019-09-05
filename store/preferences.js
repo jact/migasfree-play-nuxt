@@ -1,4 +1,5 @@
 import { internalApi } from './settings'
+import VueI18n from 'vue-i18n'
 
 const state = () => ({
   language: 'es',
@@ -34,6 +35,7 @@ const actions = {
 const mutations = {
   setPreferences(state, value) {
     state.language = value.language
+    VueI18n.locale = state.language
     state.showSyncDetails = value.show_sync_details
     state.showApps = value.show_apps
     state.showDevices = value.show_devices
@@ -44,6 +46,7 @@ const mutations = {
   },
   setLanguage(state, value) {
     state.language = value
+    VueI18n.locale = state.language
   },
   setShowSyncDetails(state, value) {
     state.showSyncDetails = value
