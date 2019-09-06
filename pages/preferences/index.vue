@@ -11,7 +11,7 @@ export default {
   },
   head() {
     return {
-      title: 'Preferences'
+      title: this.$t('menu.preferences')
     }
   }
 }

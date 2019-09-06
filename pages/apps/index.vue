@@ -11,7 +11,7 @@ export default {
   },
   head() {
     return {
-      title: 'Aplicaciones'
+      title: this.$t('menu.apps')
     }
   }
 }

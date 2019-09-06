@@ -11,7 +11,7 @@ export default {
   },
   head() {
     return {
-      title: 'Información'
+      title: this.$t('menu.info')
     }
   }
 }
