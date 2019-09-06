@@ -42,7 +42,7 @@ export default {
     setLanguage() {
       this.$store.commit('preferences/setLanguage', this.language)
       this.$store.dispatch('preferences/savePreferences')
-      this.switchLocalePath(this.language)
+      this.$i18n.setLocale(this.language)
     },
     setShowSyncDetails(value) {
       this.$store.commit('preferences/setShowSyncDetails', value)
