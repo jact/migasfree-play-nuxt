@@ -2,7 +2,7 @@ import { tokenApi } from './settings'
 
 const state = () => ({
   categories: [],
-  selectedCategory: null,
+  selectedCategory: 0,
   searchApp: null,
   onlyInstalledApps: false,
   searchDevice: null,
