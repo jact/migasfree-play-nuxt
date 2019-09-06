@@ -7,11 +7,17 @@ export default {
     info: 'Información',
     help: 'Ayuda'
   },
+  sync: {
+    action: 'Sincronizar equipo',
+    doing: 'Sincronizando...',
+    name: 'Sincronización'
+  },
   apps: {
     install: 'Instalar {name}',
     uninstall: 'Desinstalar {name}',
     filter: {
       category: 'Categoría',
+      defaultCategory: 'Todas',
       search: 'buscar',
       all: 'Todas las aplicaciones',
       installed: 'Aplicaciones instaladas'

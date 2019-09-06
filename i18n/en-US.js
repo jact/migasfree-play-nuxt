@@ -7,11 +7,17 @@ export default {
     info: 'Info',
     help: 'Help'
   },
+  sync: {
+    action: 'Synchronize computer',
+    doing: 'Synchronizing...',
+    name: 'Synchronization'
+  },
   apps: {
     install: 'Install {name}',
     uninstall: 'Uninstall {name}',
     filter: {
       category: 'Category',
+      defaultCategory: 'All',
       search: 'search',
       all: 'All apps',
       installed: 'Installed apps'
