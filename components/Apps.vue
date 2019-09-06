@@ -27,9 +27,17 @@ export default {
     AppDetail,
     Categories
   },
+  data() {
+    return {
+      apps: []
+    }
+  },
+  mounted() {
+    this.apps = this.$store.state.apps
+  },
   computed: {
     appsByFilter() {
-      let results = this.$store.state.apps
+      let results = this.apps
 
       if (this.$store.state.filters.selectedCategory > 0)
         results = results.filter(
