@@ -9,7 +9,7 @@
       <button
         id="sync"
         class="ui circular positive icon button"
-        data-tooltip="Sincronizar equipo"
+        :data-tooltip="$t('sync.action')"
         data-position="top center"
         @click="synchronize($event)"
       >
@@ -48,14 +48,14 @@ export default {
   methods: {
     synchronize(event) {
       event.srcElement.parentElement.disabled = true
-      this.$toast.info('Sincronizando...')
+      this.$toast.info(this.$t('sync.doing'))
 
       if (this.$store.state.preferences.showSyncDetails)
         this.$router.push('/details')
 
       this.$store.dispatch('executions/run', {
         cmd: 'migasfree sync',
-        text: 'Synchronization',
+        text: this.$t('sync.name'),
         element: event.srcElement.parentElement
       })
     }
