@@ -16,7 +16,7 @@
                 v-for="(item, index) in categories"
                 :key="index"
                 :value="index"
-                :selected="index == selectedCategory"
+                :selected="index === selectedCategory"
                 :label="item"
               ></el-option>
             </el-select>
@@ -61,7 +61,9 @@ export default {
     }
   },
   mounted() {
-    this.category = this.$store.state.filters.selectedCategory || 'All'
+    this.category =
+      this.$store.state.filters.selectedCategory ||
+      this.$t('apps.filter.defaultCategory')
     this.searchApp = this.$store.state.filters.searchApp
     this.onlyInstalledApps = this.$store.state.filters.onlyInstalledApps
   },
@@ -70,7 +72,10 @@ export default {
       return this.$store.state.filters.selectedCategory
     },
     categories() {
-      return this.$store.state.filters.categories
+      let results = this.$store.state.filters.categories
+      results[0] = this.$t('apps.filter.defaultCategory')
+
+      return results
     }
   },
   methods: {
