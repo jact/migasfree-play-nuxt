@@ -72,7 +72,10 @@ export default {
       return this.$store.state.filters.selectedCategory
     },
     categories() {
-      let results = this.$store.state.filters.categories
+      let results = Object.assign(
+        {},
+        this.$store.getters['filters/getCategories']
+      )
       results[0] = this.$t('apps.filter.defaultCategory')
 
       return results
