@@ -59,17 +59,18 @@ module.exports = {
     locales: [
       {
         code: 'en',
+        iso: 'en-US',
         name: 'English',
         file: 'en-US.js'
       },
       {
         code: 'es',
+        iso: 'es-ES',
         name: 'Español',
         file: 'es-ES.js'
       }
     ],
-    defaultLocale: 'es',
-    // fallbackLocale: 'en',
+    defaultLocale: 'en',
     lazy: true,
     langDir: 'i18n/'
   },
