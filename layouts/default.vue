@@ -8,6 +8,7 @@
       <nuxt />
       <button
         id="sync"
+        ref="sync"
         class="ui circular positive icon button"
         :data-tooltip="$t('sync.action')"
         data-position="top center"
@@ -39,11 +40,19 @@
 <script>
 import Menu from '@/components/Menu.vue'
 import Login from '@/components/Login.vue'
+import { setInterval } from 'timers'
+const { remote } = require('electron')
 
 export default {
   components: {
     Menu,
     Login
+  },
+  mounted() {
+    if (remote.process.argv[1] === 'sync') {
+      this.$refs.sync.click()
+      setInterval(this.$refs.sync.click(), 24 * 60 * 60 * 1000)
+    }
   },
   methods: {
     synchronize(event) {
