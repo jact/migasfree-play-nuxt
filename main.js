@@ -57,8 +57,12 @@ const newWin = () => {
   win.on('closed', () => (win = null))
 
   win.on('ready-to-show', function() {
-    win.show()
-    win.focus()
+    if (process.argv[1] === 'sync') {
+      win.minimize()
+    } else {
+      win.show()
+      win.focus()
+    }
   })
 
   win.webContents.on('new-window', openExternalLinksInOSBrowser)
