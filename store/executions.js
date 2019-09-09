@@ -90,10 +90,9 @@ const actions = {
             root: true
           })
 
-          /*if (id == 'sync' && document.hidden) { // FAB
-            // sync ok & minimized -> exit
+          if (cmd.includes('sync') && win.isMinimized()) {
             win.close()
-          }*/ // FIXME
+          }
         } else {
           this.$toast.error(replaceColors(vuexContext.state.error))
           vuexContext.commit('executions/resetExecutionError', null, {
