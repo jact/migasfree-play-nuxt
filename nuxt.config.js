@@ -70,7 +70,7 @@ module.exports = {
         file: 'es-ES.js'
       }
     ],
-    defaultLocale: 'en',
+    strategy: 'no_prefix',
     lazy: true,
     langDir: 'i18n/'
   },
