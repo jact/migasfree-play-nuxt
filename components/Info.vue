@@ -200,9 +200,18 @@ export default {
       )
     },
     computerMac() {
-      return this.$store.state.computer.data.mac_address
-        .replace(/(.{2})/g, '$1:')
-        .slice(0, -1)
+      const ret = []
+      let tmp = ''
+      for (
+        let i = 0;
+        i < this.$store.state.computer.data.mac_address.length;
+        i += 12
+      ) {
+        tmp = this.$store.state.computer.data.mac_address.substring(i, i + 12)
+        ret.push(tmp.replace(/(.{2})/g, '$1:').slice(0, -1))
+      }
+
+      return ret.join(', ')
     },
     computerId() {
       return `CID-${this.$store.state.computer.cid}`
