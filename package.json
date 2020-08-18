@@ -3,16 +3,17 @@
   "version": "2.0.0",
   "description": "Migasfree Client front-end. Allow install/uninstall available applications and printers.",
   "author": "Jose Antonio Chavarría <jachavar@gmail.com>",
-  "copyright": "© 2017-2019 migasfree team",
+  "license": "GPLv3",
+  "homepage": "https://github.com/jact/migasfree-play/blob/master/README.md",
+  "copyright": "© 2017-2020 migasfree team",
   "private": true,
-  "main": "main.js",
+  "main": "./dist/main/app.js",
   "build": {
     "appId": "com.electron.${name}",
-    "productName": "Migasfree Play",
     "directories": {
-      "buildResources": "static"
+      "buildResources": "src/renderer/static"
     },
-    "icon": "static/img/migasfree-play.svg",
+    "icon": "src/renderer/static/img/migasfree-play.svg",
     "linux": {
       "target": "deb",
       "category": "System"
@@ -25,40 +26,63 @@
         "cron"
       ],
       "packageCategory": "utils",
-      "priority": "extra"
+      "priority": "optional",
+      "desktop": {
+        "name": "Migasfree Play",
+        "exec": "migasfree-play --no-sandbox"
+      }
     }
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=DEV electron --no-sandbox .",
-    "build": "nuxt build && electron-builder"
+    "dev": "node .electron-nuxt/dev.js",
+    "build": "node .electron-nuxt/build.js",
+    "test": "",
+    "lint": "node_modules/.bin/eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --ignore-path .gitignore .",
+    "lint:fix": "yarn run lint -- --fix",
+    "preinstall": "node .electron-nuxt/check-engines.js",
+    "postinstall": "electron-builder install-app-deps & yarn run lint:fix",
+    "electron": "node .electron-nuxt/build.js && NODE_ENV=development electron --no-sandbox --debug ."
+  },
+  "engines": {
+    "node": ">=12.13.0"
   },
   "dependencies": {
-    "@chenfengyuan/vue-qrcode": "^1.0.1",
-    "@nuxtjs/axios": "^5.5.4",
-    "@nuxtjs/markdownit": "^1.2.6",
-    "@nuxtjs/toast": "^3.2.1",
+    "@chenfengyuan/vue-qrcode": "^1.0.2",
+    "@nuxtjs/axios": "^5.12.0",
+    "@nuxtjs/markdownit": "^1.2.10",
+    "@nuxtjs/toast": "^3.3.1",
     "body-parser": "^1.19.0",
     "dateformat": "^3.0.3",
     "express": "^4.17.1",
-    "nuxt": "^2.9.2",
     "nuxt-element-ui": "^1.0.10",
-    "nuxt-i18n": "^6.1.3",
+    "nuxt-i18n": "^6.13.1",
     "open": "0.0.5",
-    "python-shell": "^1.0.7",
-    "vue-js-modal": "^1.3.31",
+    "python-shell": "^2.0.1",
+    "tcp-port-used": "1.0.1",
+    "vue-js-modal": "^1.3.35",
     "vue-star-rating": "^1.6.1"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "cross-env": "^5.1.4",
-    "electron": "^7.0.0-beta.3",
-    "electron-builder": "^21.2.0",
-    "electron-devtools-installer": "^2.2.4",
-    "eslint": "^5.0.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-loader": "2.1.2",
-    "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-vue": "^4.0.0",
-    "prettier": "^1.16.4"
+    "@xpda-dev/core": "^0.1.5",
+    "@xpda-dev/electron-builder": "^0.2.1",
+    "@xpda-dev/electron-launcher": "^0.2.1",
+    "@xpda-dev/webpack-step": "^0.1.2",
+    "babel-eslint": "^10.1.0",
+    "browser-env": "3.3.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "cross-env": "7.0.2",
+    "electron": "8.3.0",
+    "electron-builder": "^22.8.0",
+    "electron-debug": "3.1.0",
+    "eslint": "^7.5.0",
+    "eslint-friendly-formatter": "4.0.1",
+    "eslint-loader": "4.0.2",
+    "eslint-plugin-nuxt": "^1.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "nuxt": "2.14.0",
+    "prettier": "^2.0.5",
+    "vue-devtools": "5.1.4",
+    "webpack": "4.43.0",
+    "webpack-node-externals": "1.7.2"
   }
 }
