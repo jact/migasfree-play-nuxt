@@ -2,7 +2,10 @@
   <div class="ui two column centered grid">
     <div class="column">
       <keep-alive>
-        <el-form ref="form" @submit.prevent>
+        <el-form
+          ref="form"
+          @submit.prevent
+        >
           <div class="field">
             <el-input
               :placeholder="$t('devices.filter.search')"
@@ -10,7 +13,7 @@
               @input="setSearchDevice"
               clearable
               prefix-icon="el-icon-search"
-            ></el-input>
+            />
           </div>
           <div class="inline field">
             <el-switch

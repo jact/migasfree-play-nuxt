@@ -3,9 +3,14 @@
     <div class="no-print">
       <center>
         <p>
-          <img src="/img/migasfree-play.svg" id="logo" />
+          <img
+            src="/img/migasfree-play.svg"
+            id="logo"
+          />
         </p>
-        <p id="app-name">{{ appName }} {{ appVersion }}</p>
+        <p id="app-name">
+          {{ appName }} {{ appVersion }}
+        </p>
         <p>{{ appDescription }}</p>
         <p>{{ appCopyright }}</p>
         <p>{{ appAuthors }}</p>
@@ -17,7 +22,10 @@
             <i class="user icon" />
             {{ $store.state.computer.user }}
           </div>
-          <div class="description" :data-tooltip="$t('info.lastSync')">
+          <div
+            class="description"
+            :data-tooltip="$t('info.lastSync')"
+          >
             <i class="calendar check outline icon" />
             {{ syncEndDate }}
           </div>
@@ -30,7 +38,10 @@
             <i :class="computerIcon" />
             {{ $store.state.computer.data.product }}
           </div>
-          <div class="description" :data-tooltip="$t('info.hardware')">
+          <div
+            class="description"
+            :data-tooltip="$t('info.hardware')"
+          >
             <p>
               <i class="microchip icon" />
               {{ $store.state.computer.data.cpu }}
@@ -53,7 +64,10 @@
             <i class="info circle icon" />
             {{ $store.state.computer.data.fqdn }}
           </div>
-          <div class="description" :data-tooltip="$t('info.networkData')">
+          <div
+            class="description"
+            :data-tooltip="$t('info.networkData')"
+          >
             <p>
               <i class="at icon" />
               {{ $store.state.computer.data.ip_address }}
@@ -74,7 +88,10 @@
             <i class="server icon" />
             {{ $store.state.host }}
           </div>
-          <div class="description" :data-tooltip="$t('info.migasfreeData')">
+          <div
+            class="description"
+            :data-tooltip="$t('info.migasfreeData')"
+          >
             <p>
               <i class="sitemap icon" />
               {{ $store.state.computer.project }}
@@ -92,17 +109,25 @@
       </div>
     </div>
 
-    <div id="qr" class="ui grid">
+    <div
+      id="qr"
+      class="ui grid"
+    >
       <div class="two wide column"></div>
       <div class="three wide column bordered">
         <div class="image">
-          <qrcode :value="qrCode" :options="{ width: 140, errorCorrectionLevel: 'low' }"></qrcode>
+          <qrcode
+            :value="qrCode"
+            :options="{ width: 140, errorCorrectionLevel: 'low' }"
+          />
         </div>
       </div>
       <div class="nine wide column bordered">
         <div class="item">
           <div class="content">
-            <div class="header">{{ $store.state.computer.name }}</div>
+            <div class="header">
+              {{ $store.state.computer.name }}
+            </div>
             <div class="description">
               <p>{{ $store.state.computer.uuid }}</p>
               <p>{{ $store.state.host }}</p>
@@ -156,16 +181,13 @@
 <script>
 import Vue from 'vue'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
-const app = require('../package.json')
+const app = require('../../../package.json')
 const dateFormat = require('dateformat')
 
 Vue.component(VueQrcode.name, VueQrcode)
 
 export default {
   name: 'Info',
-  components: {
-    VueQrcode
-  },
   data() {
     return {
       appName: app.name,
@@ -201,14 +223,16 @@ export default {
     },
     computerMac() {
       const ret = []
-      let tmp = ''
-      for (
-        let i = 0;
-        i < this.$store.state.computer.data.mac_address.length;
-        i += 12
-      ) {
-        tmp = this.$store.state.computer.data.mac_address.substring(i, i + 12)
-        ret.push(tmp.replace(/(.{2})/g, '$1:').slice(0, -1))
+      if (this.$store.state.computer.data.mac_address) {
+        let tmp = ''
+        for (
+          let i = 0;
+          i < this.$store.state.computer.data.mac_address.length;
+          i += 12
+        ) {
+          tmp = this.$store.state.computer.data.mac_address.substring(i, i + 12)
+          ret.push(tmp.replace(/(.{2})/g, '$1:').slice(0, -1))
+        }
       }
 
       return ret.join(', ')

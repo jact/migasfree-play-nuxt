@@ -10,6 +10,9 @@ const actions = {
     await this.$axios.$get(`${internalApi}/packages/available`).then(data => {
       vuexContext.commit('setAvailablePackages', data)
     })
+    .catch(error => {
+      console.log(error) // TODO
+    })
   },
   async setInstalledPackages(vuexContext) {
     await this.$axios
@@ -20,7 +23,10 @@ const actions = {
       .then(data => {
         vuexContext.commit('setInstalledPackages', data)
       })
-  }
+      .catch(error => {
+        console.log(error) // TODO
+      })
+    }
 }
 
 const mutations = {

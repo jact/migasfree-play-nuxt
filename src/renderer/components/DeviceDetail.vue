@@ -1,13 +1,32 @@
 <template>
   <div class="fluid card">
     <div class="content">
-      <img class="right floated tiny ui image" :src="icon" />
-      <div class="header" :data-tooltip="tooltip" data-position="bottom left">{{ name }}</div>
-      <div class="meta">{{ id }}</div>
-      <div class="description">{{ description }}</div>
+      <img
+        class="right floated tiny ui image"
+        :src="icon"
+      />
+      <div
+        class="header"
+        :data-tooltip="tooltip"
+        data-position="bottom left"
+      >
+        {{ name }}
+      </div>
+      <div class="meta">
+        {{ id }}
+      </div>
+      <div class="description">
+        {{ description }}
+      </div>
     </div>
-    <div class="extra content" v-if="logical">
-      <p v-for="item in visibleLogicalDevices" :key="item.id">
+    <div
+      class="extra content"
+      v-if="logical"
+    >
+      <p
+        v-for="item in visibleLogicalDevices"
+        :key="item.id"
+      >
         <span class="feature">{{ featureName(item) }}</span>
         <template v-if="isAssigned(item.id)">
           <span class="ui blue basic tag label">{{ $t('actions.assigned') }}</span>
@@ -54,8 +73,8 @@ export default {
     name: { type: String, required: true },
     id: { type: String, required: true },
     connection: { type: String, required: true },
-    description: { type: String, required: false },
-    ip: { type: String, required: false },
+    description: { type: String, required: false, default: '' },
+    ip: { type: String, required: false, default: '' },
     logical: { type: Array, required: false }
   },
   computed: {

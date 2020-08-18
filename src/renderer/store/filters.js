@@ -22,7 +22,11 @@ const actions = {
         headers: { Authorization: vuexContext.rootState.tokenValue }
       })
       .then(data => {
+        // console.log(data)
         vuexContext.commit('setCategories', data)
+      })
+      .catch(error => {
+        console.log(vuexContext.rootState.initialUrl.token, error) // TODO
       })
   }
 }

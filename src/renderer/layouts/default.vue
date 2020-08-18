@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <div id="nav">
-      <Menu :computer="$store.state.computer.name" :computerLink="$store.state.computer.link" />
+      <Menu
+        :computer="$store.state.computer.name"
+        :computer-link="$store.state.computer.link"
+      />
     </div>
 
     <div id="main">

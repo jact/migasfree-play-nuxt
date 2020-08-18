@@ -1,21 +1,38 @@
 <template>
   <div class="fluid card">
     <div class="content">
-      <img class="right floated tiny ui image" :src="icon" @error="defaultIcon" />
-      <div class="header">{{ name }}</div>
-      <div class="meta">{{ category }}</div>
+      <img
+        class="right floated tiny ui image"
+        :src="icon"
+        @error="defaultIcon"
+      />
+      <div class="header">
+        {{ name }}
+      </div>
+      <div class="meta">
+        {{ category }}
+      </div>
       <star-rating
         :rating="score"
         :read-only="true"
         :show-rating="false"
         :max-rating="5"
         :star-size="15"
-      ></star-rating>
+      />
       <details v-if="moreInfo">
         <summary>{{ truncatedDescription }}</summary>
-        <div class="more-info" v-html="$md.render(moreInfo)"></div>
+        <div
+          class="more-info"
+          v-html="$md.render(moreInfo)"
+        >
+        </div>
       </details>
-      <div v-else v-html="$md.render(truncatedDescription)" class="details"></div>
+      <div
+        v-else
+        v-html="$md.render(truncatedDescription)"
+        class="details"
+      >
+      </div>
       <div class="extra content">
         <button
           v-if="isInstallable"
@@ -52,7 +69,12 @@
         >
           <i class="lock icon" />
         </button>
-        <span v-if="isInstalled" class="ui blue basic tag label">{{ $t('actions.installed') }}</span>
+        <span
+          v-if="isInstalled"
+          class="ui blue basic tag label"
+        >
+          {{ $t('actions.installed') }}
+        </span>
       </div>
     </div>
   </div>
@@ -72,7 +94,6 @@ details,
 <script>
 import StarRating from 'vue-star-rating'
 const os = require('os')
-const spawn = require('child_process').spawn
 
 export default {
   name: 'AppDetail',
@@ -81,7 +102,7 @@ export default {
     name: { type: String, required: true },
     category: { type: String, required: true },
     score: { type: Number, required: false, default: 0 },
-    description: { type: String, required: false },
+    description: { type: String, required: false, default: '' },
     level: { type: String, required: false, default: 'U' },
     packages: { type: Array, required: false }
   },

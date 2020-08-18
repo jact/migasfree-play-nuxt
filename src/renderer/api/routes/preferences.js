@@ -3,7 +3,7 @@ let { PythonShell } = require('python-shell')
 const confFile = 'settings.json'
 const fs = require('fs')
 const path = require('path')
-const filePath = path.join(confFile)
+const filePath = path.join(process.cwd(), confFile)
 const express = require('express')
 const router = express.Router()
 
@@ -19,7 +19,7 @@ const settings = {
 }
 
 PythonShell.defaultOptions = {
-  pythonPath: '/usr/bin/python'
+  pythonPath: '/usr/bin/python3'
 }
 
 router.get('/', (req, res) => {

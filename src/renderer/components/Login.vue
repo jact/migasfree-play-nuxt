@@ -1,7 +1,16 @@
 <template>
-  <modal name="login" :width="380" :height="220" @opened="toggleModal" @closed="toggleModal">
+  <modal
+    name="login"
+    :width="380"
+    :height="220"
+    @opened="toggleModal"
+    @closed="toggleModal"
+  >
     <center>
-      <form class="ui form" @submit.prevent="login">
+      <form
+        class="ui form"
+        @submit.prevent="login"
+      >
         <legend>{{ $t('login.title') }}</legend>
         <div class="required field ui left icon input">
           <i class="user icon" />
@@ -24,7 +33,12 @@
           />
         </div>
         <div>
-          <button class="large ui positive button" type="submit">{{ $t('login.action') }}</button>
+          <button
+            class="large ui positive button"
+            type="submit"
+          >
+            {{ $t('login.action') }}
+          </button>
         </div>
       </form>
     </center>

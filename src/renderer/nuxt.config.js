@@ -1,5 +1,11 @@
 module.exports = {
   mode: 'universal',
+  server: {
+    port: 9999
+  },
+  target: 'server',
+  telemetry: false,
+  buildDir: 'nuxt-dist',
   /*
    ** Headers of the page
    */
@@ -32,6 +38,7 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: ['~plugins/vue-js-modal'],
+  serverMiddleware: [{ path: '/', handler: '~/api/index.js' }],
   /*
    ** Nuxt.js modules
    */
@@ -73,6 +80,12 @@ module.exports = {
     strategy: 'no_prefix',
     lazy: true,
     langDir: 'i18n/'
+  },
+  vue: {
+    config: {
+      productionTip: false,
+      devtools: true
+    }
   },
   /*
    ** Build configuration

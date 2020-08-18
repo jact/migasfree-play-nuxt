@@ -1,10 +1,19 @@
 <template>
-  <details :id="id" :open="id === $store.state.executions.lastId ? true : false">
+  <details
+    :id="id"
+    :open="id === $store.state.executions.lastId ? true : false"
+  >
     <summary>
       {{ command }}
-      <div class="date">{{ displayDate }}</div>
+      <div class="date">
+        {{ displayDate }}
+      </div>
     </summary>
-    <div class="text" v-html="text"></div>
+    <div
+      class="text"
+      v-html="text"
+    >
+    </div>
   </details>
 </template>
 
@@ -49,7 +58,7 @@ export default {
   props: {
     id: { type: String, required: true },
     command: { type: String, required: true },
-    text: { type: String, required: false }
+    text: { type: String, required: false, default: '' }
   },
   computed: {
     displayDate() {
@@ -57,7 +66,7 @@ export default {
     }
   },
   watch: {
-    text: (newVal, oldVal) => {
+    text: () => {
       window.scrollTo(0, document.getElementById('main').scrollHeight)
     }
   }

@@ -1,6 +1,9 @@
 <template>
   <div class="ui teal inverted borderless top fixed menu">
-    <a class="header item" :href="computerLink">
+    <a
+      class="header item"
+      :href="computerLink"
+    >
       <span class="ui big text">{{ computer }}</span>
     </a>
     <div class="right menu">

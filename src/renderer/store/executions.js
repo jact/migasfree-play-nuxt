@@ -34,6 +34,7 @@ const state = () => ({
 const actions = {
   async getExecutions(vuexContext) {
     await this.$axios.$get(`${internalApi}/executions`).then(data => {
+      // console.log(data)
       vuexContext.commit('setExecutionsLog', data)
     })
   },

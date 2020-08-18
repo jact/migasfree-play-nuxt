@@ -1,9 +1,9 @@
-import { internalApi, publicApi, tokenApi } from './settings'
+import { internalApi, /*publicApi,*/ tokenApi } from './settings'
 
 const state = () => ({
   name: '',
-  uuid: 'E0A6D7DE-8CEE-11E6-9C43-BC00002E0000', //'', // FIXME empty by default
-  cid: 4609, // FIXME 0 by default
+  uuid: 'CBAACAA2-6333-1A40-A921-6B2A0488519B', // 'E0A6D7DE-8CEE-11E6-9C43-BC00002E0000', //'', // FIXME empty by default
+  cid: 5, //4609, // FIXME 0 by default
   project: '',
   user: '',
   link: '',
@@ -19,14 +19,20 @@ const actions = {
     await this.$axios.$get(`${internalApi}/preferences/server`).then(data => {
       vuexContext.commit('setComputerInfo', data)
     })
+    .catch(error => {
+      console.log(error) // TODO
+    })
   },
   async computerNetwork(vuexContext) {
     await this.$axios.$get(`${internalApi}/computer/network`).then(data => {
       vuexContext.commit('setComputerNetwork', data)
     })
+    .catch(error => {
+      console.log(error) // TODO
+    })
   },
-  async moreComputerInfo(vuexContext) {
-    await this.$axios
+  async moreComputerInfo(/*vuexContext*/) {
+    /*await this.$axios
       .$get(
         `${vuexContext.rootState.initialUrl.baseDomain}${publicApi.computerInfo}${vuexContext.state.uuid}`
       )
@@ -38,7 +44,11 @@ const actions = {
           cid: data.cid
         })
       })
-  },
+      .catch(error => {
+        console.log(error) // TODO
+      })*/
+      // TODO migasfree-server 4 or 5 URL
+    },
   async computerData(vuexContext) {
     await this.$axios
       .$get(
@@ -77,7 +87,7 @@ const mutations = {
     state.uuid = value.uuid
     state.name = value.computer_name
     state.user = value.user
-    state.project = 'AZL-16' // value.project // FIXME
+    state.project = value.project
   },
   setMoreComputerInfo(state, value) {
     // state.cid = value.id // FIXME

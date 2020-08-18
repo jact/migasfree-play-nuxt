@@ -24,17 +24,18 @@ app.use('/executions', executionsRouter)
 app.use('/user', userRouter)
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   // set locals, only providing error in development
   res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
+  // res.locals.error = req.app.get('env') === 'development' ? err : {}
+  res.locals.error = err
 
   // render the error page
   res.status(err.status || 500)
   res.render('error')
 })
 
-let server = app.listen(3000, () => {
+app.listen(3000, () => {
   console.log('Express server listening on port 3000')
 })
 

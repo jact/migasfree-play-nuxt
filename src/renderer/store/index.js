@@ -2,7 +2,7 @@ import { tokenAuth, publicApi, tokenApi, internalApi } from './settings'
 
 const state = () => ({
   protocol: 'http', // FIXME
-  host: 'localhost:1234', // FIXME '' by default
+  host: 'localhost:2345', //'localhost:1234', // FIXME '' by default
   initialUrl: {
     baseDomain: '',
     public: '',
@@ -17,7 +17,7 @@ const state = () => ({
 })
 
 const actions = {
-  async nuxtServerInit(vuexContext) {
+  async init(vuexContext) {
     await vuexContext.dispatch('preferences/readPreferences')
 
     vuexContext.commit('setInitialUrl')
@@ -119,6 +119,7 @@ const actions = {
       user,
       password
     })
+
     if (response.is_privileged) {
       vuexContext.commit('privilegedUser')
     }

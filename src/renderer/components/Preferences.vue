@@ -3,13 +3,18 @@
     <div class="column">
       <form class="ui form">
         <div class="field">
-          <select @change="setLanguage" v-model="language">
+          <select
+            @change="setLanguage"
+            v-model="language"
+          >
             <option
               v-for="item in availableLocales"
               :key="item.code"
               :value="item.code"
               :selected="item.code === $store.state.preferences.language"
-            >{{ item.name }}</option>
+            >
+              {{ item.name }}
+            </option>
           </select>
         </div>
         <div class="inline field">

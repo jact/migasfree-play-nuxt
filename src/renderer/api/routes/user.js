@@ -3,7 +3,7 @@ let { PythonShell } = require('python-shell')
 const express = require('express')
 const router = express.Router()
 
-PythonShell.defaultOptions = { pythonPath: '/usr/bin/python' }
+PythonShell.defaultOptions = { pythonPath: '/usr/bin/python3' }
 
 router.post('/check', (req, res) => {
   const code = `
@@ -74,11 +74,12 @@ elif platform.system() == "Linux":
     is_privileged = auth(user, password) and (is_sudo_group(user) or is_root(user))
 
 print(is_privileged)
-  `
+`
 
   PythonShell.runString(code, null, (err, results) => {
     if (err) throw err
     res.setHeader('Content-Type', 'application/json')
+    console.log(code, results)
     res.send({ is_privileged: results[0] })
   })
 })

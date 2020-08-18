@@ -2,7 +2,10 @@
   <div class="ui two column centered grid">
     <div class="column">
       <keep-alive>
-        <el-form ref="form" @submit.prevent>
+        <el-form
+          ref="form"
+          @submit.prevent
+        >
           <div class="field">
             <el-select
               v-model="category"
@@ -18,7 +21,7 @@
                 :value="index"
                 :selected="index === selectedCategory"
                 :label="item"
-              ></el-option>
+              />
             </el-select>
           </div>
           <div class="field">
@@ -28,7 +31,7 @@
               @input="setSearchApp"
               clearable
               prefix-icon="el-icon-search"
-            ></el-input>
+            />
           </div>
           <div class="inline field">
             <el-switch

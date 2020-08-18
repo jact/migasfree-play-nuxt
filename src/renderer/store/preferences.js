@@ -17,6 +17,9 @@ const actions = {
     await this.$axios.$get(`${internalApi}/preferences`).then(data => {
       vuexContext.commit('setPreferences', data)
     })
+    .catch(error => {
+      console.log(error) // TODO
+    })
   },
   savePreferences(vuexContext) {
     this.$axios.$post(`${internalApi}/preferences`, {
