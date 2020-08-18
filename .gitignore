@@ -67,6 +67,7 @@ typings/
 
 # nuxt.js build output
 .nuxt
+nuxt-dist
 
 # Nuxt generate
 dist
@@ -86,9 +87,11 @@ sw.*
 
 # Mac OSX
 .DS_Store
-/semantic/
+/src/renderer/semantic/
 /semantic.json
 /settings.json
 /token
 /yarn.lock
 /executions.json
+/build/
+*.1234
