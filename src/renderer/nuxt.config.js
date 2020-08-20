@@ -31,6 +31,7 @@ module.exports = {
    ** Global CSS
    */
   css: [
+    'lato-font/css/lato-font.css',
     '~/semantic/dist/semantic.min.css',
     'element-ui/lib/theme-chalk/index.css'
   ],
