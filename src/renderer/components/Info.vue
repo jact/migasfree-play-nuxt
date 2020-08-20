@@ -4,7 +4,7 @@
       <center>
         <p>
           <img
-            src="/img/migasfree-play.svg"
+            src="img/migasfree-play.svg"
             id="logo"
           />
         </p>
