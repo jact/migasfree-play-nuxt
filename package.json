@@ -54,6 +54,8 @@
     "body-parser": "^1.19.0",
     "dateformat": "^3.0.3",
     "express": "^4.17.1",
+    "fomantic-ui": "2.7.6",
+    "lato-font": "3.0.0",
     "nuxt-element-ui": "^1.0.10",
     "nuxt-i18n": "^6.13.1",
     "open": "0.0.5",
