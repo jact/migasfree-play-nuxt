@@ -53,7 +53,7 @@ const webpackConfig = Webpack.getBaseConfig({
   devtool: 'source-map',
   target: 'electron-renderer'
 })
-console.log('webpackConfig!!!', JSON.stringify(webpackConfig))
+// console.log('webpackConfig!!!', JSON.stringify(webpackConfig))
 
 const webpackMain = new Webpack({
   logger: new Logger('Main', 'olive'),
