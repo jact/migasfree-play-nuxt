@@ -77,8 +77,6 @@ if (!NUXT_SSR_MODE) {
   })
 }
 
-console.log('files!!!', files)
-
 module.exports = {
   asar: false, // true, // false to debug
   productName: 'migasfree-play',
