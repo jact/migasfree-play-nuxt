@@ -102,12 +102,12 @@ export default class BrowserWinHandler {
       //event.sender.send('started')
 
       expressProcess.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-      });
+        console.log(`stdout: ${data}`)
+      })
 
       expressProcess.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-      });
+        console.error(`stderr: ${data}`)
+      })
     }
   }, function(err) {
     console.error('Error on check:', err.message)
