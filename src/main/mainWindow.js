@@ -20,8 +20,21 @@ const openExternalLinksInOSBrowser = (event, url) => {
   }
 }
 
+const icon = isDev
+  ? path.resolve(
+    __dirname, '..',
+    'renderer', 'static',
+    'img', 'migasfree-play.png'
+  )
+  : path.resolve(
+    __dirname, '..',
+    'renderer',
+    'img', 'migasfree-play.png'
+  )
+
+console.log(icon)
 const winHandler = new BrowserWinHandler({
-  // icon: path.join(__dirname, '../renderer', 'favicon.ico'), // FIXME path
+  icon,
   show: false,
   height: 800,
   width: 800
