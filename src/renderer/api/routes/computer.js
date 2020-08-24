@@ -5,6 +5,19 @@ const router = express.Router()
 
 PythonShell.defaultOptions = { pythonPath: '/usr/bin/python3' }
 
+router.get('/id', (req, res) => {
+  const code = `
+from migasfree_client.command import MigasFreeCommand
+
+print(MigasFreeCommand().get_computer_id())`
+
+  PythonShell.runString(code, null, (err, results) => {
+    if (err) throw err
+    res.setHeader('Content-Type', 'text/plain')
+    res.send(results[0])
+  })
+})
+
 router.get('/network', (req, res) => {
   const code = `
 import json
@@ -15,8 +28,7 @@ ret = {
     'mask': get_iface_mask(_ifname),
     'ip_address': get_iface_address(_ifname)
 }
-print(json.dumps(ret))
-  `
+print(json.dumps(ret))`
 
   PythonShell.runString(code, null, (err, results) => {
     if (err) throw err
