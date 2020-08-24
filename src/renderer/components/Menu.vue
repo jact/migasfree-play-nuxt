@@ -2,9 +2,10 @@
   <div class="ui teal inverted borderless top fixed menu">
     <a
       class="header item"
-      :href="computerLink"
+      :href="link"
+      :style="link"
     >
-      <span class="ui big text">{{ computer }}</span>
+      <span class="ui big text">{{ $store.state.computer.name }}</span>
     </a>
     <div class="right menu">
       <router-link
@@ -67,9 +68,10 @@
 <script>
 export default {
   name: 'Menu',
-  props: {
-    computer: { type: String, required: true },
-    computerLink: { type: String, required: true }
+  computed: {
+    link () {
+      return this.$store.state.computer.link
+    }
   }
 }
 </script>
