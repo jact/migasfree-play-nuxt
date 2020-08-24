@@ -10,7 +10,7 @@ router.get('/available', (req, res) => {
   const code = `
 import json
 from migasfree_client.sync import MigasFreeSync
-print(json.dumps(MigasFreeSync().pms.available_packages()))` // FIXME Client
+print(json.dumps(MigasFreeSync().pms.available_packages()))`
 
   PythonShell.runString(code, null, (err, results) => {
     if (err) throw err
