@@ -1,9 +1,9 @@
-import { internalApi, /*publicApi,*/ tokenApi } from './settings'
+import { internalApi, tokenApi } from './settings'
 
 const state = () => ({
   name: '',
-  uuid: 'CBAACAA2-6333-1A40-A921-6B2A0488519B', // 'E0A6D7DE-8CEE-11E6-9C43-BC00002E0000', //'', // FIXME empty by default
-  cid: 5, //4609, // FIXME 0 by default
+  uuid: '',
+  cid: 0,
   project: '',
   user: '',
   link: '',
@@ -31,24 +31,19 @@ const actions = {
       console.log(error) // TODO
     })
   },
-  async moreComputerInfo(/*vuexContext*/) {
-    /*await this.$axios
-      .$get(
-        `${vuexContext.rootState.initialUrl.baseDomain}${publicApi.computerInfo}${vuexContext.state.uuid}`
-      )
-      .then(data => {
-        vuexContext.commit('setMoreComputerInfo', data)
-        vuexContext.commit('setComputerLink', {
-          protocol: vuexContext.rootState.protocol,
-          host: vuexContext.rootState.host,
-          cid: data.cid
-        })
+  async computerId(vuexContext) {
+    await this.$axios.$get(`${internalApi}/computer/id`).then(data => {
+      vuexContext.commit('setComputerId', data)
+      vuexContext.commit('setComputerLink', {
+        protocol: vuexContext.rootState.protocol,
+        host: vuexContext.rootState.host,
+        cid: data
       })
-      .catch(error => {
-        console.log(error) // TODO
-      })*/
-      // TODO migasfree-server 4 or 5 URL
-    },
+  })
+    .catch(error => {
+      console.log(error) // TODO
+    })
+  },
   async computerData(vuexContext) {
     await this.$axios
       .$get(
@@ -89,14 +84,11 @@ const mutations = {
     state.user = value.user
     state.project = value.project
   },
-  setMoreComputerInfo(state, value) {
-    // state.cid = value.id // FIXME
-    state.name = value.search
-    state.helpdesk = value.helpdesk
-    // FIXME more data
+  setComputerId(state, value) {
+    state.cid = value
   },
   setComputerLink(state, value) {
-    state.link = `${value.protocol}://${value.host}/admin/server/computer/${value.cid}/`
+    state.link = `${value.protocol}://${value.host}/admin/client/computer/${value.cid}/`
   },
   setComputerData(state, value) {
     state.data = value
