@@ -1,10 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <Menu
-        :computer="$store.state.computer.name"
-        :computer-link="$store.state.computer.link"
-      />
+      <Menu />
     </div>
 
     <div id="main">
