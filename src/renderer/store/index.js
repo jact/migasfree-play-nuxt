@@ -1,7 +1,7 @@
 import { tokenAuth, publicApi, tokenApi, internalApi } from './settings'
 
 const state = () => ({
-  protocol: 'http', // FIXME
+  protocol: '',
   host: '',
   initialUrl: {
     baseDomain: '',
@@ -19,6 +19,7 @@ const state = () => ({
 const actions = {
   async init(vuexContext) {
     await vuexContext.dispatch('preferences/readPreferences')
+    await vuexContext.dispatch('apiProtocol')
     await vuexContext.dispatch('serverHost')
 
     vuexContext.commit('setInitialUrl')
@@ -125,6 +126,14 @@ const actions = {
       vuexContext.commit('privilegedUser')
     }
   },
+  async apiProtocol(vuexContext) {
+    await this.$axios.$get(`${internalApi}/preferences/protocol`).then(data => {
+      vuexContext.commit('setApiProcotol', data)
+    })
+    .catch(error => {
+      console.log(error) // TODO
+    })
+  },
   async serverHost(vuexContext) {
     await this.$axios.$get(`${internalApi}/preferences/server`).then(data => {
       vuexContext.commit('setServerHost', data)
@@ -163,6 +172,9 @@ const mutations = {
   },
   setServerHost(state, value) {
     state.host = value.server
+  },
+  setApiProcotol(state, value) {
+    state.protocol = value
   },
   setApps(state, value) {
     state.apps = []
