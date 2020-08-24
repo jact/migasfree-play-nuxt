@@ -2,7 +2,7 @@ import { tokenAuth, publicApi, tokenApi, internalApi } from './settings'
 
 const state = () => ({
   protocol: 'http', // FIXME
-  host: 'localhost:2345', //'localhost:1234', // FIXME '' by default
+  host: '',
   initialUrl: {
     baseDomain: '',
     public: '',
@@ -19,6 +19,7 @@ const state = () => ({
 const actions = {
   async init(vuexContext) {
     await vuexContext.dispatch('preferences/readPreferences')
+    await vuexContext.dispatch('serverHost')
 
     vuexContext.commit('setInitialUrl')
 
@@ -123,6 +124,14 @@ const actions = {
     if (response.is_privileged) {
       vuexContext.commit('privilegedUser')
     }
+  },
+  async serverHost(vuexContext) {
+    await this.$axios.$get(`${internalApi}/preferences/server`).then(data => {
+      vuexContext.commit('setServerHost', data)
+    })
+    .catch(error => {
+      console.log(error) // TODO
+    })
   }
 }
 
@@ -151,6 +160,9 @@ const mutations = {
   },
   setServerVersion(state, value) {
     state.serverVersion = value
+  },
+  setServerHost(state, value) {
+    state.host = value.server
   },
   setApps(state, value) {
     state.apps = []
