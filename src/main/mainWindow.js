@@ -32,7 +32,6 @@ const icon = isDev
     'img', 'migasfree-play.png'
   )
 
-console.log(icon)
 const winHandler = new BrowserWinHandler({
   icon,
   show: false,
