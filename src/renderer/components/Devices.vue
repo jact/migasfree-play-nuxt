@@ -66,8 +66,8 @@ export default {
       else return `${item.model.manufacturer.name} ${item.model.name}`
     },
     icon(connection) {
-      if (connection === 'TCP') return '/img/printer-net.png'
-      else return '/img/printer-local.png'
+      if (connection === 'TCP') return 'img/printer-net.png'
+      else return 'img/printer-local.png'
     },
     ipAddress(value) {
       let data = JSON.parse(value)
