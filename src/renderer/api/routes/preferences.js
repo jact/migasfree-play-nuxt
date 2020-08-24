@@ -63,4 +63,17 @@ print(json.dumps(ret))`
   })
 })
 
+router.get('/protocol', (req, res) => {
+  const code = `
+from migasfree_client.command import MigasFreeCommand
+
+print(MigasFreeCommand().api_protocol())`
+
+  PythonShell.runString(code, null, (err, results) => {
+    if (err) throw err
+    res.setHeader('Content-Type', 'text/plain')
+    res.send(results[0])
+  })
+})
+
 module.exports = router
