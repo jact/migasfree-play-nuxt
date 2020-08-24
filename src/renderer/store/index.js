@@ -26,7 +26,7 @@ const actions = {
 
     await vuexContext.dispatch('computer/computerInfo')
     await vuexContext.dispatch('computer/computerNetwork')
-    await vuexContext.dispatch('computer/moreComputerInfo')
+    await vuexContext.dispatch('computer/computerId')
 
     await vuexContext.dispatch('packages/setAvailablePackages')
     await vuexContext.dispatch('serverInfo')
