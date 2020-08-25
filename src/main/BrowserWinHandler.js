@@ -1,9 +1,5 @@
 import { EventEmitter } from 'events'
-import { BrowserWindow, app/*, ipcMain*/ } from 'electron'
-import {spawn} from 'child_process'
-
-const tcpPortUsed = require('tcp-port-used')
-const path = require('path')
+import { BrowserWindow, app } from 'electron'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -87,29 +83,3 @@ export default class BrowserWinHandler {
     })
   }
 }
-
-//ipcMain.on('start', (event) => {
-  tcpPortUsed.check(3000, '127.0.0.1')
-  .then(function(inUse) {
-    console.log('Port 3000 usage: ' + inUse) // debug
-    if (!inUse) {
-      const expressApi = isProduction
-        ? path.join(__dirname, 'api.js')
-        : path.join(__dirname, '..', 'renderer', 'api')
-      // Instantiate Express App
-      console.log('instantiating express app...!!!') // debug
-      const expressProcess = spawn('node', [expressApi], {detached: false})
-      //event.sender.send('started')
-
-      expressProcess.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`)
-      })
-
-      expressProcess.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`)
-      })
-    }
-  }, function(err) {
-    console.error('Error on check:', err.message)
-  })
-//})
