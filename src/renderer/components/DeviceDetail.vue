@@ -75,7 +75,7 @@ export default {
     connection: { type: String, required: true },
     description: { type: String, required: false, default: '' },
     ip: { type: String, required: false, default: '' },
-    logical: { type: Array, required: false }
+    logical: { type: Array, required: false, default: () => [] }
   },
   computed: {
     tooltip() {
