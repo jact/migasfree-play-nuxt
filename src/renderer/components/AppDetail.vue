@@ -104,7 +104,7 @@ export default {
     score: { type: Number, required: false, default: 0 },
     description: { type: String, required: false, default: '' },
     level: { type: String, required: false, default: 'U' },
-    packages: { type: Array, required: false }
+    packages: { type: Array, required: false, default: () => [] }
   },
   components: {
     StarRating
