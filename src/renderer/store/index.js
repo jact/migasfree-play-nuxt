@@ -63,7 +63,7 @@ const actions = {
         reject
       })
     })
-    // await vuexContext.dispatch('devices/getFeaturesDevices') // why is not working in Device component?
+    await vuexContext.dispatch('devices/getFeaturesDevices')
   },
   async serverInfo(vuexContext) {
     await this.$axios
