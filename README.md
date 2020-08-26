@@ -23,3 +23,11 @@ $ sudo migasfree-play --no-sandbox --remote-debugging-port=8315
 
 * migasfree-client >= 5.0
 * migasfree-backend >= 5.0
+
+## Screenshots
+
+![migasfree-play Apps](./screenshots/play-apps.png "migasfree-play Apps")
+
+![migasfree-play Printers](./screenshots/play-printers.png "migasfree-play Printers")
+
+![migasfree-play Info](./screenshots/play-info.png "migasfree-play Info")
