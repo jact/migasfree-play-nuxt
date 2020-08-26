@@ -16,7 +16,8 @@ const windowsOS = {
 const linuxOS = {
   linux: {
     icon: 'src/renderer/static/img/migasfree-play.svg',
-    target: 'deb',
+    target: ['deb'/*, 'rpm'*/],
+    arch: ['x64'],
     category: 'System'
   },
   deb: {
@@ -57,7 +58,7 @@ const macOS = {
   }
 }
 
-const files=[
+const files = [
   'package.json',
   {
     from: 'dist/main/',
@@ -66,7 +67,7 @@ const files=[
   {
     from: 'src/resources/',
     to: 'dist/resources/'
-  },
+  }
 ]
 
 // if not SSR mode, add nuxt generate dist to Electron
@@ -78,7 +79,7 @@ if (!NUXT_SSR_MODE) {
 }
 
 module.exports = {
-  asar: false, // true, // false to debug
+  asar: false,
   productName: 'migasfree-play',
   appId: 'org.migasfree.migasfree-play',
   artifactName: 'migasfree-play-${version}.${ext}',
@@ -86,7 +87,7 @@ module.exports = {
     output: 'build'
   },
   // default files: https://www.electron.build/configuration/contents
-  files: files,
+  files,
   ...windowsOS,
   ...linuxOS,
   ...macOS
