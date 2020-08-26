@@ -6,17 +6,20 @@
 
 ```bash
 # install dependencies
-$ yarn install
+$ sudo yarn install
 
-# serve with hot reload at localhost:3000
-$ yarn dev
+# serve with hot reload at localhost:9999
+$ sudo yarn dev
 
 # build for production and launch server
-$ yarn build
-$ yarn start
+$ sudo yarn build
+$ sudo electron --no-sandbox .
 
-# generate static project
-$ yarn generate
+# after install package
+$ sudo migasfree-play --no-sandbox --remote-debugging-port=8315
 ```
 
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+## Requirements
+
+* migasfree-client >= 5.0
+* migasfree-backend >= 5.0
