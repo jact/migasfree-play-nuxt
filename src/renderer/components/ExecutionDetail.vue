@@ -66,7 +66,7 @@ export default {
     }
   },
   watch: {
-    text: () => {
+    text: function () {
       window.scrollTo(0, document.getElementById('main').scrollHeight)
     }
   }
