@@ -17,7 +17,7 @@ const linuxOS = {
   linux: {
     icon: 'src/renderer/static/img/migasfree-play.svg',
     target: ['deb'/*, 'rpm'*/],
-    arch: ['x64'],
+    //arch: ['x64'],
     category: 'System'
   },
   deb: {
