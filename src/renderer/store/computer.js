@@ -88,6 +88,7 @@ const mutations = {
     state.cid = value
   },
   setComputerLink(state, value) {
+    // FIXME path
     state.link = `${value.protocol}://${value.host}/admin/client/computer/${value.cid}/`
   },
   setComputerData(state, value) {
